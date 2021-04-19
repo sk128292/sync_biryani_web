@@ -5,7 +5,6 @@ import 'package:sync_biryani_web/provider/app_provider.dart';
 import 'package:sync_biryani_web/provider/user_provider.dart';
 import 'package:sync_biryani_web/screens/home_page.dart';
 import 'package:sync_biryani_web/screens/login.dart';
-import 'package:sync_biryani_web/widgets/footer.dart';
 import 'package:sync_biryani_web/widgets/loading.dart';
 
 Future<void> main() async {
@@ -47,23 +46,5 @@ class ScreenController extends StatelessWidget {
       default:
         return LoginPage();
     }
-  }
-}
-
-class MyHomePage extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Colors.blue[50],
-      body: SingleChildScrollView(
-        child: Column(
-          children: [
-            HomePage(),
-            SizedBox(height: MediaQuery.of(context).size.width / 12),
-            WidgetFooter(),
-          ],
-        ),
-      ),
-    );
   }
 }

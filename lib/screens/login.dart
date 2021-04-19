@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:sync_biryani_web/helpers/commans.dart';
 import 'package:sync_biryani_web/helpers/screen_navigation.dart';
-import 'package:sync_biryani_web/main.dart';
 import 'package:sync_biryani_web/provider/user_provider.dart';
 import 'package:sync_biryani_web/screens/home_page.dart';
 import 'package:sync_biryani_web/screens/registration.dart';
@@ -247,7 +246,7 @@ class _LoginPageState extends State<LoginPage> {
                                       }
                                       authProvider.cleanControllers();
                                       changeScreenReplacement(
-                                          context, HomePage());
+                                          context, MyHomePage());
                                     },
                                     child: Container(
                                       decoration: BoxDecoration(

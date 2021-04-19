@@ -4,9 +4,10 @@ import 'package:flutter/scheduler.dart';
 import 'package:sync_biryani_web/widgets/cart.dart';
 import 'package:sync_biryani_web/widgets/footer.dart';
 import 'package:sync_biryani_web/widgets/item_category.dart';
-import 'package:sync_biryani_web/widgets/navbar.dart';
 import 'package:sync_biryani_web/widgets/product.dart';
 import 'package:sync_biryani_web/widgets/responsive.dart';
+import 'package:sync_biryani_web/widgets/synch_drawer.dart';
+import 'package:sync_biryani_web/widgets/top_bar_content.dart';
 
 class Items extends StatefulWidget {
   @override
@@ -14,14 +15,35 @@ class Items extends StatefulWidget {
 }
 
 class _ItemsState extends State<Items> {
+  double _opacity = 0.6;
   @override
   Widget build(BuildContext context) {
+    var screenSize = MediaQuery.of(context).size;
     return Scaffold(
       backgroundColor: Colors.lightBlueAccent,
+      appBar: Responsive.isMobile(context)
+          ? AppBar(
+              backgroundColor: Colors.blueGrey.shade900.withOpacity(_opacity),
+              elevation: 0,
+              title: Text(
+                'SF Biryani',
+                style: TextStyle(
+                  color: Colors.blueGrey.shade100,
+                  fontSize: 20,
+                  fontFamily: 'Montserrat',
+                  fontWeight: FontWeight.w400,
+                  letterSpacing: 3,
+                ),
+              ),
+            )
+          : PreferredSize(
+              preferredSize: Size(screenSize.width, 1000),
+              child: TopBarContent(),
+            ),
+      drawer: SynchDrawer(),
       body: SingleChildScrollView(
         child: Column(
           children: [
-            // Navbar(),
             Padding(
               padding: const EdgeInsets.all(10.0),
               child: Container(
@@ -34,7 +56,6 @@ class _ItemsState extends State<Items> {
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Navbar(),
                       Container(
                         width: MediaQuery.of(context).size.width / 1.2,
                         height: MediaQuery.of(context).size.width / 5.5,
