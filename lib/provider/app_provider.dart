@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 class AppProvider with ChangeNotifier {
   bool isLoading = false;
-  // int totalPrice = 0;
+  int totalPrice = 0;
   int priceSum = 0;
   int qtySum = 0;
 

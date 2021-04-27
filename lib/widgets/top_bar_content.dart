@@ -1,4 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:sync_biryani_web/helpers/screen_navigation.dart';
+import 'package:sync_biryani_web/provider/user_provider.dart';
+import 'package:sync_biryani_web/screens/home_page.dart';
+import 'package:sync_biryani_web/screens/login.dart';
 
 class TopBarContent extends StatefulWidget {
   @override
@@ -20,6 +25,9 @@ class _TopBarContentState extends State<TopBarContent> {
   // bool _isProcessing = false;
   @override
   Widget build(BuildContext context) {
+    final user = Provider.of<UserProvider>(context);
+    // final app = Provider.of<AppProvider>(context);
+    final authProvider = Provider.of<UserProvider>(context);
     var screenSize = MediaQuery.of(context).size;
     return PreferredSize(
       preferredSize: Size(screenSize.width, 1000),
@@ -53,12 +61,19 @@ class _TopBarContentState extends State<TopBarContent> {
                               : _isHovering[0] = false;
                         });
                       },
-                      onTap: () {},
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => MyHomePage(),
+                          ),
+                        );
+                      },
                       child: Column(
                         mainAxisSize: MainAxisSize.min,
                         children: [
                           Text(
-                            'Discover',
+                            'Home',
                             style: TextStyle(
                               color: _isHovering[0]
                                   ? Colors.blue[200]
@@ -121,16 +136,16 @@ class _TopBarContentState extends State<TopBarContent> {
                       onHover: (value) {
                         setState(() {
                           value
-                              ? _isHovering[1] = true
-                              : _isHovering[1] = false;
+                              ? _isHovering[2] = true
+                              : _isHovering[2] = false;
                         });
                       },
-                      onTap: () {},
+                      onTap: () async {},
                       child: Column(
                         mainAxisSize: MainAxisSize.min,
                         children: [
                           Text(
-                            'Sign Out',
+                            authProvider.userModel?.name ?? "name loading...",
                             style: TextStyle(
                               color: _isHovering[2]
                                   ? Colors.blue[200]
@@ -143,6 +158,45 @@ class _TopBarContentState extends State<TopBarContent> {
                             maintainState: true,
                             maintainSize: true,
                             visible: _isHovering[2],
+                            child: Container(
+                              height: 2,
+                              width: 30,
+                              color: Colors.white,
+                            ),
+                          )
+                        ],
+                      ),
+                    ),
+                    SizedBox(width: screenSize.width / 30),
+                    InkWell(
+                      onHover: (value) {
+                        setState(() {
+                          value
+                              ? _isHovering[3] = true
+                              : _isHovering[3] = false;
+                        });
+                      },
+                      onTap: () async {
+                        await user.signOut();
+                        changeScreen(context, LoginPage());
+                      },
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Text(
+                            'Sign Out',
+                            style: TextStyle(
+                              color: _isHovering[3]
+                                  ? Colors.blue[200]
+                                  : Colors.white,
+                            ),
+                          ),
+                          SizedBox(height: 5),
+                          Visibility(
+                            maintainAnimation: true,
+                            maintainState: true,
+                            maintainSize: true,
+                            visible: _isHovering[3],
                             child: Container(
                               height: 2,
                               width: 30,

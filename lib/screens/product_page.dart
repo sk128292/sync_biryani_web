@@ -1,15 +1,19 @@
 import 'package:carousel_pro/carousel_pro.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
+import 'package:sync_biryani_web/models/category_model.dart';
 import 'package:sync_biryani_web/widgets/cart.dart';
 import 'package:sync_biryani_web/widgets/footer.dart';
-import 'package:sync_biryani_web/widgets/item_category.dart';
 import 'package:sync_biryani_web/widgets/product.dart';
 import 'package:sync_biryani_web/widgets/responsive.dart';
 import 'package:sync_biryani_web/widgets/synch_drawer.dart';
 import 'package:sync_biryani_web/widgets/top_bar_content.dart';
 
 class Items extends StatefulWidget {
+  final CategoryModel categoryModel;
+
+  const Items({Key key, this.categoryModel}) : super(key: key);
+
   @override
   _ItemsState createState() => _ItemsState();
 }
@@ -20,7 +24,7 @@ class _ItemsState extends State<Items> {
   Widget build(BuildContext context) {
     var screenSize = MediaQuery.of(context).size;
     return Scaffold(
-      backgroundColor: Colors.lightBlueAccent,
+      backgroundColor: Colors.blueGrey[200],
       appBar: Responsive.isMobile(context)
           ? AppBar(
               backgroundColor: Colors.blueGrey.shade900.withOpacity(_opacity),
@@ -54,7 +58,7 @@ class _ItemsState extends State<Items> {
                 child: Padding(
                   padding: const EdgeInsets.only(bottom: 10),
                   child: Column(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    mainAxisAlignment: MainAxisAlignment.end,
                     children: [
                       Container(
                         width: MediaQuery.of(context).size.width / 1.2,
@@ -171,17 +175,16 @@ class _ItemsState extends State<Items> {
             ),
             Padding(
               padding: const EdgeInsets.all(25.0),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Responsive.isDesktop(context)
-                      ? ItemCategory()
-                      : Container(width: 10),
-                  Products(),
-                  Responsive.isDesktop(context) ? Cart() : Container(width: 10)
-                ],
-              ),
+              child: Responsive.isDesktop(context)
+                  ? Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Products(),
+                        Cart(),
+                      ],
+                    )
+                  : Products(),
             ),
             WidgetFooter(),
           ],

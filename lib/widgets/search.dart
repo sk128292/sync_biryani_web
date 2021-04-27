@@ -8,7 +8,7 @@ class SearchBox extends StatefulWidget {
 }
 
 class _SearchBoxState extends State<SearchBox> {
-  String _city = '';
+  String _city = ' DELHI ';
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -141,70 +141,72 @@ class _SearchBoxState extends State<SearchBox> {
             ],
           ),
         ),
-        Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: Container(
-            height: MediaQuery.of(context).size.width / 6,
-            child: ListView(
-              scrollDirection: Axis.horizontal,
-              children: [
-                Container(
-                  width: MediaQuery.of(context).size.width / 4,
-                  clipBehavior: Clip.antiAlias,
-                  decoration: BoxDecoration(
-                      borderRadius: BorderRadius.all(Radius.circular(8)),
-                      color: Colors.red),
-                  child: Image(
-                    image: AssetImage("images/a.jpg"),
-                    fit: BoxFit.cover,
-                  ),
-                ),
-                SizedBox(
-                  width: 20,
-                ),
-                Container(
-                  width: MediaQuery.of(context).size.width / 4,
-                  clipBehavior: Clip.antiAlias,
-                  decoration: BoxDecoration(
-                      borderRadius: BorderRadius.all(Radius.circular(8)),
-                      color: Colors.red),
-                  child: Image(
-                    image: AssetImage("images/grapesbanner.jpg"),
-                    fit: BoxFit.cover,
-                  ),
-                ),
-                SizedBox(
-                  width: 20,
-                ),
-                Container(
-                  width: MediaQuery.of(context).size.width / 4,
-                  clipBehavior: Clip.antiAlias,
-                  decoration: BoxDecoration(
-                      borderRadius: BorderRadius.all(Radius.circular(8)),
-                      color: Colors.red),
-                  child: Image(
-                    image: AssetImage("images/lycheebanner.jpg"),
-                    fit: BoxFit.cover,
-                  ),
-                ),
-                SizedBox(
-                  width: 20,
-                ),
-                Container(
-                  width: MediaQuery.of(context).size.width / 4,
-                  clipBehavior: Clip.antiAlias,
-                  decoration: BoxDecoration(
-                      borderRadius: BorderRadius.all(Radius.circular(8)),
-                      color: Colors.red),
-                  child: Image(
-                    image: AssetImage("images/pearsbanner.jpg"),
-                    fit: BoxFit.cover,
-                  ),
-                ),
-              ],
-            ),
-          ),
-        ),
+
+        // Padding(
+        //   padding: const EdgeInsets.all(8.0),
+        //   child: Container(
+        //     height: MediaQuery.of(context).size.width / 6,
+        //     child: ListView(
+        //       scrollDirection: Axis.horizontal,
+        //       children: [
+        //         Container(
+        //           width: MediaQuery.of(context).size.width / 4,
+        //           clipBehavior: Clip.antiAlias,
+        //           decoration: BoxDecoration(
+        //               borderRadius: BorderRadius.all(Radius.circular(8)),
+        //               color: Colors.red),
+        //           child: Image(
+        //             image: AssetImage("images/a.jpg"),
+        //             fit: BoxFit.cover,
+        //           ),
+        //         ),
+        //         SizedBox(
+        //           width: 20,
+        //         ),
+        //         Container(
+        //           width: MediaQuery.of(context).size.width / 4,
+        //           clipBehavior: Clip.antiAlias,
+        //           decoration: BoxDecoration(
+        //               borderRadius: BorderRadius.all(Radius.circular(8)),
+        //               color: Colors.red),
+        //           child: Image(
+        //             image: AssetImage("images/grapesbanner.jpg"),
+        //             fit: BoxFit.cover,
+        //           ),
+        //         ),
+        //         SizedBox(
+        //           width: 20,
+        //         ),
+        //         Container(
+        //           width: MediaQuery.of(context).size.width / 4,
+        //           clipBehavior: Clip.antiAlias,
+        //           decoration: BoxDecoration(
+        //               borderRadius: BorderRadius.all(Radius.circular(8)),
+        //               color: Colors.red),
+        //           child: Image(
+        //             image: AssetImage("images/lycheebanner.jpg"),
+        //             fit: BoxFit.cover,
+        //           ),
+        //         ),
+        //         SizedBox(
+        //           width: 20,
+        //         ),
+        //         Container(
+        //           width: MediaQuery.of(context).size.width / 4,
+        //           clipBehavior: Clip.antiAlias,
+        //           decoration: BoxDecoration(
+        //               borderRadius: BorderRadius.all(Radius.circular(8)),
+        //               color: Colors.red),
+        //           child: Image(
+        //             image: AssetImage("images/pearsbanner.jpg"),
+        //             fit: BoxFit.cover,
+        //           ),
+        //         ),
+        //       ],
+        //     ),
+        //   ),
+        // ),
+
         // Container(
         //   width: 1000,
         //   height: 400,
