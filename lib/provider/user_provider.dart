@@ -1,8 +1,12 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:sync_biryani_web/models/order_model.dart';
+import 'package:sync_biryani_web/models/product_model.dart';
 import 'package:sync_biryani_web/models/user_model.dart';
+import 'package:sync_biryani_web/services/order_services.dart';
 import 'package:sync_biryani_web/services/user_services.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:uuid/uuid.dart';
 
 enum Status { Uninitialized, Authenticated, Authenticating, Unauthenticated }
 
@@ -12,7 +16,7 @@ class UserProvider with ChangeNotifier {
   Status _status = Status.Uninitialized;
   FirebaseFirestore _firestore = FirebaseFirestore.instance;
   UserServices _userServices = UserServices();
-  // OrderServices _orderServices = OrderServices();
+  OrderServices _orderServices = OrderServices();
   UserModel _userModel;
 
   // getters
@@ -23,7 +27,7 @@ class UserProvider with ChangeNotifier {
 
   // public variables
 
-  // List<OrderModel> orders = [];
+  List<OrderModel> orders = [];
 
   final formKey = GlobalKey<FormState>();
 
@@ -109,55 +113,55 @@ class UserProvider with ChangeNotifier {
     name.text = "";
   }
 
-  // Future<bool> addToCart({ProductModel product, int qty}) async {
-  //   print("The Product Is : ${product.toString()} ");
-  //   print("The Qty Is : ${qty.toString()} ");
-  //   try {
-  //     var uuid = Uuid();
-  //     String cartItemId = uuid.v4();
-  //     List cart = _userModel.cart;
-  //     // bool itemExists = false;
-  //     Map cartItem = {
-  //       "id": cartItemId,
-  //       "name": product.name,
-  //       "image": product.image,
-  //       "productId": product.id,
-  //       "price": product.price,
-  //       "qty": product.qty,
-  //     };
-  //     // for (Map item in cart) {
-  //     //   if (item["productId"] == cartItem["productId"]) {
-  //     //     item["qty"] = item["qty"] + qty;
-  //     //     itemExists = true;
-  //     //     break;
-  //     //   }
-  //     // }
-  //     // if (!itemExists) {
-  //     print("Cart Items Are : ${cart.toString()}");
-  //     _userServices.addToCart(userId: _user.uid, cartItem: cartItem);
-  //     // }
+  Future<bool> addToCart({ProductModel product, int qty}) async {
+    print("The Product Is : ${product.toString()} ");
+    print("The Qty Is : ${qty.toString()} ");
+    try {
+      var uuid = Uuid();
+      String cartItemId = uuid.v4();
+      List cart = _userModel.cart;
+      bool itemExists = false;
+      Map cartItem = {
+        "id": cartItemId,
+        "name": product.name,
+        "productId": product.id,
+        "price": product.price,
+        "qty": product.qty,
+      };
+      for (Map item in cart) {
+        if (item["productId"] == cartItem["productId"]) {
+          // item["qty"] = item["qty"] + qty;
+          itemExists = true;
+          print("The items are already exist in cart");
+          break;
+        }
+      }
+      if (!itemExists) {
+        print("Cart Items Are : ${cart.toString()}");
+        _userServices.addToCart(userId: _user.uid, cartItem: cartItem);
+      }
 
-  //     return true;
-  //   } catch (e) {
-  //     print("The error ${e.toString()}");
-  //     return false;
-  //   }
-  // }
+      return true;
+    } catch (e) {
+      print("The error ${e.toString()}");
+      return false;
+    }
+  }
 
-  // getOrders() async {
-  //   orders = await _orderServices.getUserOrders(userId: _user.uid);
-  //   notifyListeners();
-  // }
+  getOrders() async {
+    orders = await _orderServices.getUserOrders(userId: _user.uid);
+    notifyListeners();
+  }
 
-  // Future<bool> removeFromCart({Map cartItem}) async {
-  //   print("The Product Is : ${cartItem.toString()} ");
-  //   try {
-  //     _userServices.removeFromCart(userId: _user.uid, cartItem: cartItem);
+  Future<bool> removeFromCart({Map cartItem}) async {
+    print("The Product Is : ${cartItem.toString()} ");
+    try {
+      _userServices.removeFromCart(userId: _user.uid, cartItem: cartItem);
 
-  //     return true;
-  //   } catch (e) {
-  //     print("The error ${e.toString()}");
-  //     return false;
-  //   }
-  // }
+      return true;
+    } catch (e) {
+      print("The error ${e.toString()}");
+      return false;
+    }
+  }
 }

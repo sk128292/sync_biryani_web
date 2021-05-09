@@ -174,18 +174,17 @@ class _ItemsState extends State<Items> {
               ),
             ),
             Padding(
-              padding: const EdgeInsets.all(25.0),
-              child: Responsive.isDesktop(context)
-                  ? Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Products(),
-                        Cart(),
-                      ],
-                    )
-                  : Products(),
-            ),
+                padding: const EdgeInsets.all(25.0),
+                child: Responsive.isDesktop(context)
+                    ? Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Products(),
+                          Cart(),
+                        ],
+                      )
+                    : Products()),
             WidgetFooter(),
           ],
         ),

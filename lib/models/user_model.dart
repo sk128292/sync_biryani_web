@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:sync_biryani_web/models/cart_item_model.dart';
 
 class UserModel {
   static const NAME = "name";
@@ -11,7 +12,7 @@ class UserModel {
   String _email;
   String _id;
   String _stripeId;
-  // int _priceSum = 0;
+  int _priceSum = 0;
   // int _qtySum = 0;
 
   // Getters
@@ -35,24 +36,23 @@ class UserModel {
     // totalCartAmount = getTotalAmount(cart: snapshot.data()[CART]) ?? [];
   }
 
-  // int getTotalAmount({List cart}) {
-  //   for (Map cartItem in cart) {
-  //     _priceSum += cartItem["price"] * cartItem["qty"];
-  //   }
+  int getTotalAmount({List cart}) {
+    for (Map cartItem in cart) {
+      _priceSum += cartItem["price"] * cartItem["qty"];
+    }
 
-  //   int total = _priceSum;
+    int total = _priceSum;
 
-  //   print("the Total is: $total");
-  //   print("the Total is: $total");
-  //   print("the Total is: $total");
+    print("the Total is: $total");
 
-  //   return total;
-  // }
-  // List<CartItemModel> _convertCartItems(List<Map> cart) {
-  //   List<CartItemModel> convertedCart = [];
-  //   for (Map cartItem in cart) {
-  //     convertedCart.add(CartItemModel.fromMap(cartItem));
-  //   }
-  //   return convertedCart;
-  // }
+    return total;
+  }
+
+  List<CartItemModel> _convertCartItems(List<Map> cart) {
+    List<CartItemModel> convertedCart = [];
+    for (Map cartItem in cart) {
+      convertedCart.add(CartItemModel.fromMap(cartItem));
+    }
+    return convertedCart;
+  }
 }

@@ -26,7 +26,6 @@ class _TopBarContentState extends State<TopBarContent> {
   @override
   Widget build(BuildContext context) {
     final user = Provider.of<UserProvider>(context);
-    // final app = Provider.of<AppProvider>(context);
     final authProvider = Provider.of<UserProvider>(context);
     var screenSize = MediaQuery.of(context).size;
     return PreferredSize(

@@ -33,7 +33,7 @@ class ProductModel {
   // bool featured = _featured;
 
   ProductModel.fromSnapshot(DocumentSnapshot snapshot) {
-    _id = snapshot.data()[id];
+    _id = snapshot.data()[ID];
     _name = snapshot.data()[NAME];
     _image = snapshot.data()[IMAGE];
     _category = snapshot.data()[CATEGORY];

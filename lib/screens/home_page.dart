@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:sync_biryani_web/helpers/commans.dart';
 import 'package:sync_biryani_web/helpers/screen_navigation.dart';
 import 'package:sync_biryani_web/provider/category_provider.dart';
 import 'package:sync_biryani_web/provider/product_provider.dart';
 import 'package:sync_biryani_web/screens/product_page.dart';
+import 'package:sync_biryani_web/widgets/categories.dart';
 import 'package:sync_biryani_web/widgets/footer.dart';
 import 'package:sync_biryani_web/widgets/promise.dart';
 import 'package:sync_biryani_web/widgets/responsive.dart';
@@ -51,7 +51,7 @@ class _MyHomePageState extends State<MyHomePage> {
               preferredSize: Size(screenSize.width, 1000),
               child: TopBarContent(),
             ),
-      // drawer: SynchDrawer(),
+      drawer: SynchDrawer(),
       body: SafeArea(
         child: ListView(
           children: [
@@ -71,100 +71,47 @@ class _MyHomePageState extends State<MyHomePage> {
               ],
             ),
             Container(
-              color: red,
               height: screenSize.width / 6,
-              child: ListView.builder(
-                  scrollDirection: Axis.horizontal,
-                  itemCount: categoryProvider.categories.length,
-                  itemBuilder: (_, index) {
-                    return Container(
-                      width: MediaQuery.of(context).size.width / 4,
-                      clipBehavior: Clip.antiAlias,
-                      decoration: BoxDecoration(
-                          borderRadius: BorderRadius.all(Radius.circular(8)),
-                          color: Colors.red),
-                      child: Image(
-                        image: AssetImage("images/a.jpg"),
-                        fit: BoxFit.cover,
-                      ),
-                    );
-                  }
-                  // children: [
-                  //   Container(
-                  //     width: MediaQuery.of(context).size.width / 4,
-                  //     clipBehavior: Clip.antiAlias,
-                  //     decoration: BoxDecoration(
-                  //         borderRadius: BorderRadius.all(Radius.circular(8)),
-                  //         color: Colors.red),
-                  //     child: Image(
-                  //       image: AssetImage("images/a.jpg"),
-                  //       fit: BoxFit.cover,
-                  //     ),
-                  //   ),
-                  //   SizedBox(
-                  //     width: 20,
-                  //   ),
-                  //   Container(
-                  //     width: MediaQuery.of(context).size.width / 4,
-                  //     clipBehavior: Clip.antiAlias,
-                  //     decoration: BoxDecoration(
-                  //         borderRadius: BorderRadius.all(Radius.circular(8)),
-                  //         color: Colors.red),
-                  //     child: Image(
-                  //       image: AssetImage("images/grapesbanner.jpg"),
-                  //       fit: BoxFit.cover,
-                  //     ),
-                  //   ),
-                  //   SizedBox(
-                  //     width: 20,
-                  //   ),
-                  //   Container(
-                  //     width: MediaQuery.of(context).size.width / 4,
-                  //     clipBehavior: Clip.antiAlias,
-                  //     decoration: BoxDecoration(
-                  //         borderRadius: BorderRadius.all(Radius.circular(8)),
-                  //         color: Colors.red),
-                  //     child: Image(
-                  //       image: AssetImage("images/lycheebanner.jpg"),
-                  //       fit: BoxFit.cover,
-                  //     ),
-                  //   ),
-                  //   SizedBox(
-                  //     width: 20,
-                  //   ),
-                  //   Container(
-                  //     width: MediaQuery.of(context).size.width / 4,
-                  //     clipBehavior: Clip.antiAlias,
-                  //     decoration: BoxDecoration(
-                  //         borderRadius: BorderRadius.all(Radius.circular(8)),
-                  //         color: Colors.red),
-                  //     child: Image(
-                  //       image: AssetImage("images/pearsbanner.jpg"),
-                  //       fit: BoxFit.cover,
-                  //     ),
-                  //   ),
-                  // ],
-                  ),
-              // ListView.builder(
-              //   scrollDirection: Axis.horizontal,
-              //   itemCount: categoryProvider.categories.length,
-              //   itemBuilder: (_, index) {
-              //     return GestureDetector(
-              //       onTap: () async {
-              //         await productProvider.loadProductsByCategory(
-              //             categoryName:
-              //                 categoryProvider.categories[index].name);
-              //         changeScreen(
-              //           context,
-              //           Items(
-              //             categoryModel: categoryProvider.categories[index],
-              //           ),
-              //         );
-              //       },
-              //       child: Text(productProvider.products.length.toString()),
-              //     );
-              //   },
-              // ),
+              child:
+                  // ListView.builder(
+                  //   scrollDirection: Axis.horizontal,
+                  //   itemCount: categoryProvider.categories.length,
+                  //   itemBuilder: (_, index) {
+                  //     return Padding(
+                  //       padding: const EdgeInsets.all(10.0),
+                  //       child: Container(
+                  //         width: MediaQuery.of(context).size.width / 4,
+                  //         clipBehavior: Clip.antiAlias,
+                  //         decoration: BoxDecoration(
+                  //             borderRadius: BorderRadius.all(Radius.circular(8)),
+                  //             color: Colors.red),
+                  //         child: Text(categoryProvider.categories[index].name),
+                  //       ),
+                  //     );
+                  //   },
+                  // ),
+                  ListView.builder(
+                scrollDirection: Axis.horizontal,
+                itemCount: categoryProvider.categories.length,
+                itemBuilder: (_, index) {
+                  return GestureDetector(
+                    onTap: () async {
+                      await productProvider.loadProductsByCategory(
+                          categoryName:
+                              categoryProvider.categories[index].name);
+                      changeScreen(
+                        context,
+                        Items(
+                          categoryModel: categoryProvider.categories[index],
+                        ),
+                      );
+                    },
+                    child: Categories(
+                      category: categoryProvider.categories[index],
+                    ),
+                  );
+                },
+              ),
             ),
             Promise(),
             Story(),
