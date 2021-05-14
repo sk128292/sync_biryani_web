@@ -10,6 +10,7 @@ import 'package:sync_biryani_web/widgets/synch_drawer.dart';
 import 'package:sync_biryani_web/widgets/top_bar_content.dart';
 
 class Items extends StatefulWidget {
+  static const String id = 'products-screen';
   final CategoryModel categoryModel;
 
   const Items({Key key, this.categoryModel}) : super(key: key);

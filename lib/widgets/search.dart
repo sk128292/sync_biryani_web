@@ -1,6 +1,11 @@
+import 'dart:js';
+
 import 'package:flutter/material.dart';
+import 'package:geodesy/geodesy.dart';
 import 'package:sync_biryani_web/location/utilities/api.dart';
+import 'package:sync_biryani_web/location/utilities/loc.dart';
 import 'package:sync_biryani_web/screens/product_page.dart';
+import 'package:sync_biryani_web/services/comman_services.dart';
 
 class SearchBox extends StatefulWidget {
   @override
@@ -8,7 +13,13 @@ class SearchBox extends StatefulWidget {
 }
 
 class _SearchBoxState extends State<SearchBox> {
-  String _city = ' DELHI ';
+  CommanServices _services = CommanServices();
+  Geodesy geodesy = Geodesy();
+
+  String _city = '';
+  double _latitude = 0.0;
+  double _longitude = 0.0;
+
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -70,7 +81,12 @@ class _SearchBoxState extends State<SearchBox> {
                   ? GestureDetector(
                       onTap: () async {
                         final _val = await LocationAPI().fetchData();
-                        setState(() => _city = _val);
+                        setState(
+                          () {
+                            _city = _val;
+                          },
+                        );
+                        getLat();
                       },
                       child: Container(
                         height: 50,
@@ -99,8 +115,25 @@ class _SearchBoxState extends State<SearchBox> {
                     )
                   : GestureDetector(
                       onTap: () {
-                        Navigator.push(context,
-                            MaterialPageRoute(builder: (context) => Items()));
+                        LatLng l2 = LatLng(_latitude, _longitude);
+                        LatLng l1 = LatLng(28.599365, 77.074882);
+                        num distance =
+                            (geodesy.distanceBetweenTwoGeoPoints(l1, l2)) /
+                                1000;
+                        print('Distance From Store: ' +
+                            distance.toStringAsFixed(2) +
+                            ' Km');
+                        if (distance >= 10) {
+                          _services.showMyDialog(
+                            title: 'Delivery Unavailable',
+                            message:
+                                'You Location is more than change your Location',
+                            context: context,
+                          );
+                        } else {
+                          Navigator.push(context,
+                              MaterialPageRoute(builder: (context) => Items()));
+                        }
                       },
                       child: Container(
                         height: 50,
@@ -127,9 +160,8 @@ class _SearchBoxState extends State<SearchBox> {
                         ),
                       ),
                     ),
-
-              // Text('LAT : $_latitude'),
-              // Text('LONG : $_longitude'),
+              // Text('LAT : $_latitude'.toString()),
+              // Text('LONG : $_longitude'.toString()),
               // OutlinedButton(
               //   onPressed: () async {
               //     final _val = await LocationAPI().fetchData();
@@ -236,5 +268,26 @@ class _SearchBoxState extends State<SearchBox> {
         // ),
       ],
     );
+  }
+
+  void getLat() {
+    getCurrentPosition(allowInterop((pos) {
+      setState(() {
+        _latitude = pos.coords.latitude;
+        _longitude = pos.coords.longitude;
+      });
+    }));
+  }
+
+  void calculateDistance() {
+    Geodesy geodesy = Geodesy();
+
+    LatLng l1 = LatLng(28.599365, 77.074882);
+    LatLng l2 = LatLng(_latitude, _longitude);
+
+    num distance = geodesy.distanceBetweenTwoGeoPoints(l1, l2);
+    print("Distance: " + (distance / 1000).toString());
+    print(_latitude);
+    print(_longitude);
   }
 }

@@ -7,6 +7,8 @@ import 'package:sync_biryani_web/provider/product_provider.dart';
 import 'package:sync_biryani_web/provider/user_provider.dart';
 import 'package:sync_biryani_web/screens/home_page.dart';
 import 'package:sync_biryani_web/screens/login.dart';
+import 'package:sync_biryani_web/screens/product_page.dart';
+import 'package:sync_biryani_web/screens/registration.dart';
 import 'package:sync_biryani_web/widgets/loading.dart';
 
 Future<void> main() async {
@@ -26,13 +28,21 @@ Future<void> main() async {
         theme: ThemeData(
           primarySwatch: Colors.red,
         ),
-        home: ScreenController(),
+        initialRoute: ScreenController.id,
+        routes: {
+          MyHomePage.id: (context) => MyHomePage(),
+          LoginPage.id: (context) => LoginPage(),
+          Items.id: (context) => Items(),
+          Registration.id: (context) => Registration(),
+          ScreenController.id: (context) => ScreenController(),
+        },
       ),
     ),
   );
 }
 
 class ScreenController extends StatelessWidget {
+  static const String id = 'screenController-screen';
   // This widget is the root of the application.
   @override
   Widget build(BuildContext context) {

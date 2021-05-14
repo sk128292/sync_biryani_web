@@ -10,6 +10,7 @@ import 'package:provider/provider.dart';
 import 'package:sync_biryani_web/widgets/responsive.dart';
 
 class Registration extends StatefulWidget {
+  static const String id = 'registration-screen';
   @override
   _RegistrationState createState() => _RegistrationState();
 }

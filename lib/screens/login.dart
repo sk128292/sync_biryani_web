@@ -10,6 +10,7 @@ import 'package:sync_biryani_web/widgets/loading.dart';
 import 'package:sync_biryani_web/widgets/responsive.dart';
 
 class LoginPage extends StatefulWidget {
+  static const String id = 'login-screen';
   @override
   _LoginPageState createState() => _LoginPageState();
 }

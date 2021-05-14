@@ -4,6 +4,8 @@ import 'package:sync_biryani_web/models/product_model.dart';
 class ProductServices {
   String collection = "products";
   FirebaseFirestore _firestore = FirebaseFirestore.instance;
+  CollectionReference products =
+      FirebaseFirestore.instance.collection('products');
 
   Future<List<ProductModel>> getProducts() async =>
       _firestore.collection(collection).get().then((result) {

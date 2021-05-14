@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
 
 import 'package:sync_biryani_web/location/model/loc.dart';
@@ -13,7 +14,7 @@ class LocationAPI {
     var _city = '';
     final resp = await http.get(_url);
 
-    if (resp.statusCode == 200) {
+    if (kIsWeb) {
       final _data = LocationModel.fromJson(json.decode(resp.body));
 
       _city = _data.city;
