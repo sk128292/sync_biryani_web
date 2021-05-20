@@ -1,55 +1,39 @@
-import 'dart:html';
-
 import 'package:carousel_pro/carousel_pro.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
-import 'package:sync_biryani_web/models/category_model.dart';
+import 'package:sync_biryani_web/screens/product_page.dart';
 import 'package:sync_biryani_web/widgets/cart.dart';
 import 'package:sync_biryani_web/widgets/footer.dart';
 import 'package:sync_biryani_web/widgets/product.dart';
 import 'package:sync_biryani_web/widgets/responsive.dart';
-import 'package:sync_biryani_web/widgets/synch_drawer.dart';
+import 'package:sync_biryani_web/widgets/second_screen_widget/product_show.dart';
 import 'package:sync_biryani_web/widgets/top_bar_content.dart';
 
-class Items extends StatefulWidget {
-  static const String id = 'products-screen';
-  final CategoryModel categoryModel;
-
-  const Items({Key key, this.categoryModel}) : super(key: key);
+class ProductScreen extends StatefulWidget {
+  static const String id = 'product-screen';
 
   @override
-  _ItemsState createState() => _ItemsState();
+  _ProductScreenState createState() => _ProductScreenState();
 }
 
-class _ItemsState extends State<Items> {
-  double _opacity = 0.6;
+class _ProductScreenState extends State<ProductScreen> {
   @override
   Widget build(BuildContext context) {
-    var screenSize = MediaQuery.of(context).size;
     return Scaffold(
       backgroundColor: Colors.blueGrey[200],
-      appBar: Responsive.isMobile(context)
-          ? AppBar(
-              backgroundColor: Colors.blueGrey.shade900.withOpacity(_opacity),
-              elevation: 0,
-              title: Text(
-                'SF Biryani',
-                style: TextStyle(
-                  color: Colors.blueGrey.shade100,
-                  fontSize: 20,
-                  fontFamily: 'Montserrat',
-                  fontWeight: FontWeight.w400,
-                  letterSpacing: 3,
-                ),
-              ),
-            )
-          : PreferredSize(
-              preferredSize: Size(screenSize.width, 1000),
-              child: TopBarContent(),
+      body: NestedScrollView(
+        headerSliverBuilder: (BuildContext context, bool innerBoxIsScrolled) {
+          return [
+            SliverList(
+              delegate: SliverChildListDelegate([
+                TopBarContent(),
+              ]),
             ),
-      drawer: SynchDrawer(),
-      body: SingleChildScrollView(
-        child: Column(
+          ];
+        },
+        body: ListView(
+          // physics: NeverScrollableScrollPhysics(),
+          shrinkWrap: true,
           children: [
             Padding(
               padding: const EdgeInsets.all(10.0),
@@ -176,19 +160,19 @@ class _ItemsState extends State<Items> {
                 ],
               ),
             ),
-            // Padding(
-            //     padding: const EdgeInsets.all(25.0),
-            //     child: Responsive.isDesktop(context)
-            //         ? Row(
-            //             mainAxisAlignment: MainAxisAlignment.center,
-            //             crossAxisAlignment: CrossAxisAlignment.start,
-            //             children: [
-            //               Products(),
-            //               Cart(),
-            //             ],
-            //           )
-            //         : Products()),
-            // WidgetFooter(),
+            Padding(
+                padding: const EdgeInsets.all(25.0),
+                child: Responsive.isDesktop(context)
+                    ? Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          ProductDisplay(),
+                          Cart(),
+                        ],
+                      )
+                    : ProductDisplay()),
+            WidgetFooter(),
           ],
         ),
       ),

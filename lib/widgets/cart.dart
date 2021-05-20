@@ -92,8 +92,10 @@ class _CartState extends State<Cart> {
                                                 Text(
                                                   "kg" +
                                                       " X " +
-                                                      user.userModel
-                                                          .cart[index]["qty"]
+                                                      user
+                                                          .userModel
+                                                          .cart[index]
+                                                              ["unitQty"]
                                                           .toString(),
                                                 ),
                                                 SizedBox(
@@ -150,6 +152,7 @@ class _CartState extends State<Cart> {
                                                 duration: Duration(seconds: 1),
                                               ),
                                             );
+                                            user.reloadUserModel();
                                             app.changeLoading();
                                             return;
                                           } else {

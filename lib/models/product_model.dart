@@ -8,26 +8,26 @@ class ProductModel {
   static const CATEGORY = "category";
   static const DESCRIPTION = "description";
   static const AVAILABLE = "available";
-  static const QTY = "qty";
+  static const QTY = "unitQty";
 
-  int _id;
+  String _id;
   String _name;
   String _image;
   String _price;
   String _category;
   String _description;
   bool _available;
-  int _qty;
+  int _unitQty;
 
   // getter
 
-  int get id => _id;
+  String get id => _id;
   String get name => _name;
   String get image => _image;
   String get category => _category;
   String get description => _description;
   String get price => _price;
-  int get qty => _qty;
+  int get unitQty => _unitQty;
   bool get featured => _available;
 
   // bool featured = _featured;
@@ -39,7 +39,7 @@ class ProductModel {
     _category = snapshot.data()[CATEGORY];
     _description = snapshot.data()[DESCRIPTION];
     _price = snapshot.data()[PRICE];
-    _qty = snapshot.data()[QTY];
+    _unitQty = snapshot.data()[QTY];
     _available = snapshot.data()[AVAILABLE];
   }
 }

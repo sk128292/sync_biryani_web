@@ -40,6 +40,8 @@ dependencies:
   cloud_firestore: ^0.14.4
   uuid: ^2.2.2
   transparent_image: ^2.0.0
+  flutter_easyloading: ^2.2.2
+  persistent_bottom_nav_bar: ^4.0.2
 
 dev_dependencies:
   flutter_test:

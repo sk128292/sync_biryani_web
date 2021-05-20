@@ -24,7 +24,7 @@ class UserModel {
 
 // public variable
 
-  List cart;
+  List cart = [];
   int totalCartAmount;
 
   UserModel.fromSnapshot(DocumentSnapshot snapshot) {

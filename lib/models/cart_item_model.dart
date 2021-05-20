@@ -2,12 +2,12 @@ class CartItemModel {
   static const ID = "id";
   static const NAME = "name";
   static const PRODUCT_ID = "productId";
-  static const QTY = "qty";
+  static const QTY = "unitQty";
   static const PRICE = "price";
 
   int _id;
   String _name;
-  int _productId;
+  String _productId;
   int _qty;
   int _price;
 
@@ -15,8 +15,8 @@ class CartItemModel {
 
   int get id => _id;
   String get name => _name;
-  int get productId => _productId;
-  int get qty => _qty;
+  String get productId => _productId;
+  int get unitQty => _qty;
   int get price => _price;
 
   CartItemModel.fromMap(Map data) {

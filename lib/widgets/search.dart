@@ -5,6 +5,7 @@ import 'package:geodesy/geodesy.dart';
 import 'package:sync_biryani_web/location/utilities/api.dart';
 import 'package:sync_biryani_web/location/utilities/loc.dart';
 import 'package:sync_biryani_web/screens/product_page.dart';
+import 'package:sync_biryani_web/screens/second_screen/second_page.dart';
 import 'package:sync_biryani_web/services/comman_services.dart';
 
 class SearchBox extends StatefulWidget {
@@ -131,14 +132,16 @@ class _SearchBoxState extends State<SearchBox> {
                             context: context,
                           );
                         } else {
-                          Navigator.push(context,
-                              MaterialPageRoute(builder: (context) => Items()));
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => ProductScreen()));
                         }
                       },
                       child: Container(
                         height: 50,
                         decoration: BoxDecoration(
-                          color: Colors.red,
+                          color: Colors.green,
                           border: Border.all(color: Colors.grey),
                           borderRadius: BorderRadius.only(
                             topRight: Radius.circular(10),

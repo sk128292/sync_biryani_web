@@ -2,18 +2,17 @@ import 'dart:html';
 
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:provider/provider.dart';
 import 'package:readmore/readmore.dart';
-import 'package:sync_biryani_web/models/cart_item_model.dart';
+import 'package:sync_biryani_web/models/product_model.dart';
 import 'package:sync_biryani_web/provider/app_provider.dart';
 import 'package:sync_biryani_web/provider/product_provider.dart';
 import 'package:sync_biryani_web/provider/user_provider.dart';
-import 'package:sync_biryani_web/services/cart_service.dart';
 import 'package:sync_biryani_web/widgets/responsive.dart';
 
 class Products extends StatefulWidget {
   // final ProductModel productModel;
-  // final UserModel userModel;
 
   // const Products({Key key, this.userModel}) : super(key: key);
 
@@ -22,24 +21,17 @@ class Products extends StatefulWidget {
 }
 
 class _ProductsState extends State<Products> {
-  CartService cartService = CartService();
-  // UserModel _use rModel;
+  // CollectionReference _users = FirebaseFirestore.instance.collection('users');
+
+  // UserModel _userModel;
   final _key = GlobalKey<ScaffoldState>();
 
   @override
-  void initState() {
-    getCartData();
-    super.initState();
-  }
-
-  getCartData() {
-    // List cart = _userModel.cart;
-  }
-
   Widget build(BuildContext context) {
     final productProvider = Provider.of<ProductProvider>(context);
     final app = Provider.of<AppProvider>(context);
     final user = Provider.of<UserProvider>(context);
+
     return SingleChildScrollView(
       key: _key,
       primary: false,
@@ -121,49 +113,83 @@ class _ProductsState extends State<Products> {
                                       children: [
                                         Text(productProvider
                                             .products[index].price),
-                                        MaterialButton(
-                                          color: Colors.red[400],
-                                          onPressed: () async {
-                                            app.changeLoading();
-                                            print("All set loading");
-                                            bool value = await cartService
-                                                .addToCartNew(document);
-                                            // product: productProvider
-                                            //     .products[index],
-                                            // qty: productProvider
-                                            //     .products[index].qty);
-                                            if (value) {
-                                              print("Item Added to cart");
-                                              // ignore: deprecated_member_use
-                                              ScaffoldMessenger.of(context)
-                                                  .showSnackBar(
-                                                SnackBar(
-                                                  content:
-                                                      Text("Added to Cart"),
-                                                  duration:
-                                                      Duration(seconds: 2),
-                                                ),
-                                              );
-                                              user.reloadUserModel();
-                                              app.changeLoading();
-                                              return;
-                                            } else {
-                                              print("Item not Added to cart");
-                                            }
-
-                                            print("Loading set false");
-                                          },
-                                          child: Text(
-                                            "Add To Cart",
-                                            style: TextStyle(
-                                              fontSize: MediaQuery.of(context)
-                                                      .size
-                                                      .width /
-                                                  85,
-                                              color: Colors.white,
-                                            ),
-                                          ),
+                                        SizedBox(
+                                          width: 40,
                                         ),
+                                        Text(
+                                          "Rs: " +
+                                              (productProvider
+                                                      .products[index].unitQty)
+                                                  .toString(),
+                                          style: TextStyle(
+                                              color: Colors.orange[700],
+                                              fontWeight: FontWeight.bold),
+                                        ),
+                                        !user.userModel.cart.contains({
+                                          productProvider.products[index].id
+                                        })
+                                            ? MaterialButton(
+                                                color: Colors.red[400],
+                                                onPressed: () {
+                                                  print('Hello');
+                                                  print(user.userModel.cart
+                                                      .contains({
+                                                    productProvider
+                                                        .products[index].id
+                                                  }));
+                                                  user.reloadUserModel();
+                                                  app.changeLoading();
+                                                  user
+                                                      .addToCart(
+                                                    product: productProvider
+                                                        .products[index],
+                                                  )
+                                                      .then((value) {
+                                                    EasyLoading.showSuccess(
+                                                        'Added Successfully');
+                                                    setState(() {
+                                                      // itemExist = true;
+                                                    });
+                                                  });
+                                                  // if (value) {
+                                                  //   setState(() {
+                                                  //     // itemExist = true;
+                                                  //   });
+                                                  //   print("Item Added to cart");
+                                                  //   // ignore: deprecated_member_use
+                                                  //   ScaffoldMessenger.of(
+                                                  //           context)
+                                                  //       .showSnackBar(
+                                                  //     SnackBar(
+                                                  //       content: Text(
+                                                  //           "Added to Cart"),
+                                                  //       duration: Duration(
+                                                  //           seconds: 1),
+                                                  //     ),
+                                                  //   );
+                                                  user.reloadUserModel();
+                                                  app.changeLoading();
+                                                  return;
+                                                  // } else {
+                                                  //   print(
+                                                  //       "Item not Added to cart");
+                                                  // }
+
+                                                  // print("Loading set false");
+                                                },
+                                                child: Text(
+                                                  "Add To Cart",
+                                                  style: TextStyle(
+                                                    fontSize:
+                                                        MediaQuery.of(context)
+                                                                .size
+                                                                .width /
+                                                            85,
+                                                    color: Colors.white,
+                                                  ),
+                                                ),
+                                              )
+                                            : Text('hi')
                                       ],
                                     )
                                   ],

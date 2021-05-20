@@ -24,7 +24,6 @@ class UserProvider with ChangeNotifier {
   Status get status => _status;
   UserModel get userModel => _userModel;
   User get user => _user;
-
   // public variables
 
   List<OrderModel> orders = [];
@@ -98,6 +97,7 @@ class UserProvider with ChangeNotifier {
     _userModel = await _userServices.getUserById(user.uid);
     notifyListeners();
   }
+
   // general Methods..
 
   bool _onError(String error) {
@@ -113,9 +113,9 @@ class UserProvider with ChangeNotifier {
     name.text = "";
   }
 
-  Future<bool> addToCart({ProductModel product, int qty}) async {
+  Future<bool> addToCart({ProductModel product}) async {
     print("The Product Is : ${product.toString()} ");
-    print("The Qty Is : ${qty.toString()} ");
+    // print("The Qty Is : ${unitQty.toString()} ");
     try {
       var uuid = Uuid();
       String cartItemId = uuid.v4();
@@ -126,7 +126,7 @@ class UserProvider with ChangeNotifier {
         "name": product.name,
         "productId": product.id,
         "price": product.price,
-        "qty": product.qty,
+        "unitQty": product.unitQty,
       };
       for (Map item in cart) {
         if (item["productId"] == cartItem["productId"]) {

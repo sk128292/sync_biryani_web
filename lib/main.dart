@@ -1,5 +1,6 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:provider/provider.dart';
 import 'package:sync_biryani_web/provider/app_provider.dart';
 import 'package:sync_biryani_web/provider/category_provider.dart';
@@ -9,6 +10,7 @@ import 'package:sync_biryani_web/screens/home_page.dart';
 import 'package:sync_biryani_web/screens/login.dart';
 import 'package:sync_biryani_web/screens/product_page.dart';
 import 'package:sync_biryani_web/screens/registration.dart';
+import 'package:sync_biryani_web/screens/second_screen/second_page.dart';
 import 'package:sync_biryani_web/widgets/loading.dart';
 
 Future<void> main() async {
@@ -34,8 +36,10 @@ Future<void> main() async {
           LoginPage.id: (context) => LoginPage(),
           Items.id: (context) => Items(),
           Registration.id: (context) => Registration(),
+          ProductScreen.id: (context) => ProductScreen(),
           ScreenController.id: (context) => ScreenController(),
         },
+        builder: EasyLoading.init(),
       ),
     ),
   );
