@@ -33,7 +33,7 @@ class _AddToCartWidgetState extends State<AddToCartWidget> {
   getCartData() async {
     final snapshot =
         await _cartService.cart.doc(user.uid).collection('products').get();
-    if (snapshot.docs.length == 0) {
+    if (snapshot.docs.isEmpty) {
       setState(() {
         _loading = false;
       });
@@ -54,16 +54,22 @@ class _AddToCartWidgetState extends State<AddToCartWidget> {
         .where('productId', isEqualTo: widget.documnet.data()['id'])
         .get()
         .then((QuerySnapshot querySnapshot) {
-      querySnapshot.docs.forEach((doc) {
-        if (doc['productId'] == widget.documnet.data()['id']) {
-          setState(() {
-            _exist = true;
-            _unitQty = doc['unitQty'];
-            _docId = doc.id;
-          });
-        }
-        return;
-      });
+      if (querySnapshot.docs.isNotEmpty) {
+        querySnapshot.docs.forEach((doc) {
+          if (doc['productId'] == widget.documnet.data()['id']) {
+            setState(() {
+              _exist = true;
+              _unitQty = doc['unitQty'];
+              _docId = doc.id;
+            });
+          }
+          return;
+        });
+      } else {
+        setState(() {
+          _exist = false;
+        });
+      }
     });
     return _loading
         ? Container(
@@ -81,10 +87,12 @@ class _AddToCartWidgetState extends State<AddToCartWidget> {
             : MaterialButton(
                 color: Colors.red[400],
                 onPressed: () {
-                  _user.reloadUserModel();
                   EasyLoading.show(status: 'Adding to Cart');
                   _cartService.addToCartNew(widget.documnet).then(
                     (value) {
+                      setState(() {
+                        _exist = true;
+                      });
                       EasyLoading.showSuccess('Added Successfully');
                       _user.reloadUserModel();
                     },

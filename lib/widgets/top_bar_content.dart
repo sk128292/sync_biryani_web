@@ -4,6 +4,7 @@ import 'package:sync_biryani_web/helpers/screen_navigation.dart';
 import 'package:sync_biryani_web/provider/user_provider.dart';
 import 'package:sync_biryani_web/screens/home_page.dart';
 import 'package:sync_biryani_web/screens/login.dart';
+import 'package:sync_biryani_web/screens/profile_screen.dart';
 
 class TopBarContent extends StatefulWidget {
   @override
@@ -26,7 +27,6 @@ class _TopBarContentState extends State<TopBarContent> {
   @override
   Widget build(BuildContext context) {
     final user = Provider.of<UserProvider>(context);
-    final authProvider = Provider.of<UserProvider>(context);
     var screenSize = MediaQuery.of(context).size;
     return PreferredSize(
       preferredSize: Size(screenSize.width, 1000),
@@ -139,12 +139,19 @@ class _TopBarContentState extends State<TopBarContent> {
                               : _isHovering[2] = false;
                         });
                       },
-                      onTap: () async {},
+                      onTap: () async {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => ProfileScreen(),
+                          ),
+                        );
+                      },
                       child: Column(
                         mainAxisSize: MainAxisSize.min,
                         children: [
                           Text(
-                            authProvider.userModel?.name ?? "name loading...",
+                            "Profile",
                             style: TextStyle(
                               color: _isHovering[2]
                                   ? Colors.blue[200]

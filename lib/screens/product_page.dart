@@ -1,12 +1,7 @@
-import 'dart:html';
-
 import 'package:carousel_pro/carousel_pro.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:sync_biryani_web/models/category_model.dart';
-import 'package:sync_biryani_web/widgets/cart.dart';
-import 'package:sync_biryani_web/widgets/footer.dart';
-import 'package:sync_biryani_web/widgets/product.dart';
 import 'package:sync_biryani_web/widgets/responsive.dart';
 import 'package:sync_biryani_web/widgets/synch_drawer.dart';
 import 'package:sync_biryani_web/widgets/top_bar_content.dart';

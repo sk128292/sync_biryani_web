@@ -1,11 +1,8 @@
-import 'dart:html';
-
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:provider/provider.dart';
 import 'package:readmore/readmore.dart';
-import 'package:sync_biryani_web/models/product_model.dart';
 import 'package:sync_biryani_web/provider/app_provider.dart';
 import 'package:sync_biryani_web/provider/product_provider.dart';
 import 'package:sync_biryani_web/provider/user_provider.dart';
@@ -112,7 +109,8 @@ class _ProductsState extends State<Products> {
                                           MainAxisAlignment.spaceBetween,
                                       children: [
                                         Text(productProvider
-                                            .products[index].price),
+                                            .products[index].price
+                                            .toString()),
                                         SizedBox(
                                           width: 40,
                                         ),
@@ -291,7 +289,8 @@ class _ProductsState extends State<Products> {
                                             MainAxisAlignment.spaceBetween,
                                         children: [
                                           Text(productProvider
-                                              .products[index].price),
+                                              .products[index].price
+                                              .toString()),
                                           MaterialButton(
                                             color: Colors.red[400],
                                             onPressed: () {},

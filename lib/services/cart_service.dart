@@ -11,19 +11,19 @@ class CartService {
       'name': user.email,
     });
 
-    print('nothing going');
     return cart.doc(user.uid).collection("products").add({
       'productId': document.data()['id'],
       'name': document.data()['name'],
       'unitQty': document.data()['unitQty'],
       'price': document.data()['price'],
-      // 'qty': 1,
+      'comparedPrice': document.data()['comparedPrice'],
+      'total': document.data()['price'],
     }).then((value) {
-      print("Hi");
+      print("Item Added to Cart");
     });
   }
 
-  Future<void> updateCartQty(docId, unitQty) async {
+  Future<void> updateCartQty(docId, unitQty, total) async {
     DocumentReference documentReference = FirebaseFirestore.instance
         .collection('cart')
         .doc(user.uid)
@@ -40,12 +40,24 @@ class CartService {
           }
 
           // Perform an update on the document
-          transaction.update(documentReference, {'unitQty': unitQty});
+          transaction
+              .update(documentReference, {'unitQty': unitQty, 'total': total});
 
           // Return the new count
           return unitQty;
         })
         .then((value) => print("Updated Cart "))
         .catchError((error) => print("Failed to update Cart: $error"));
+  }
+
+  Future<void> removeFromCart(docId) async {
+    cart.doc(user.uid).collection('products').doc(docId).delete();
+  }
+
+  Future<void> checkData() async {
+    final snapshot = await cart.doc(user.uid).collection('products').get();
+    if (snapshot.docs.length == 0) {
+      cart.doc(user.uid).delete();
+    }
   }
 }

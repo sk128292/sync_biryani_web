@@ -67,15 +67,22 @@ class ProductCard extends StatelessWidget {
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            Text(documnet.data()['price']),
-                            SizedBox(
-                              width: 40,
+                            Text(
+                              "Rs: " + (documnet.data()['price'].toString()),
+                              style: TextStyle(
+                                color: Colors.orange[700],
+                                fontWeight: FontWeight.bold,
+                              ),
                             ),
                             Text(
-                              "Rs: " + (documnet.data()['unitQty']).toString(),
+                              "Qty: " + (documnet.data()['unitQty'].toString()),
                               style: TextStyle(
-                                  color: Colors.orange[700],
-                                  fontWeight: FontWeight.bold),
+                                color: Colors.orange[700],
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                            SizedBox(
+                              width: 40,
                             ),
                             AddToCartWidget(documnet)
                           ],

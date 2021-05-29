@@ -1,19 +1,41 @@
+import 'dart:html';
+
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:sync_biryani_web/provider/app_provider.dart';
-import 'package:sync_biryani_web/provider/user_provider.dart';
+import 'package:sync_biryani_web/helpers/screen_navigation.dart';
+import 'package:sync_biryani_web/provider/cart_provider.dart';
+import 'package:sync_biryani_web/screens/login.dart';
+import 'package:sync_biryani_web/services/user_services.dart';
+import 'package:sync_biryani_web/widgets/cart/cart_list.dart';
+import 'package:sync_biryani_web/widgets/cart/cod_toggle.dart';
+import 'package:sync_biryani_web/widgets/cart/coupon_widget.dart';
 
 class Cart extends StatefulWidget {
+  final DocumentSnapshot document;
+  Cart({this.document});
+
   @override
   _CartState createState() => _CartState();
 }
 
 class _CartState extends State<Cart> {
+  int discount = 30;
+  int deliveryFee = 50;
+
   @override
   Widget build(BuildContext context) {
-    final user = Provider.of<UserProvider>(context);
-    final app = Provider.of<AppProvider>(context);
+    UserServices _userService = UserServices();
+    User user = FirebaseAuth.instance.currentUser;
+
+    DocumentSnapshot doc;
+    var _cartProvider = Provider.of<CartProvider>(context);
+    _cartProvider.getCartTotal();
+    var _payable = _cartProvider.subTotal + deliveryFee - discount;
+
     return Card(
+      color: Colors.grey[350],
       child: Container(
         width: MediaQuery.of(context).size.width / 3.5,
 
@@ -32,7 +54,7 @@ class _CartState extends State<Cart> {
                         fontWeight: FontWeight.bold,
                         fontSize: 20),
                   ),
-                  Text("Items " + user.userModel.cart.length.toString()),
+                  Text("Items " + _cartProvider.cartQty.toString()),
                 ],
               ),
             ),
@@ -44,256 +66,162 @@ class _CartState extends State<Cart> {
                 color: Colors.black,
               ),
             ),
-            user.userModel.cart.length != 0
-                ? ListView.builder(
-                    shrinkWrap: true,
-                    itemCount: user.userModel.cart.length,
-                    itemBuilder: (_, index) {
-                      print(
-                          'The Price is : ${user.userModel.cart[index]["price"].toString()}');
-                      return Column(
-                        children: [
-                          Row(
-                            children: <Widget>[
-                              Expanded(
-                                child: Container(
-                                  padding: EdgeInsets.only(left: 8, right: 5),
-                                  child: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: <Widget>[
-                                      Container(
-                                        width:
-                                            MediaQuery.of(context).size.width /
-                                                6,
-                                        child: Column(
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.start,
-                                          children: [
-                                            RichText(
-                                              text: TextSpan(
-                                                text: user.userModel.cart[index]
-                                                    ["name"],
-                                                // "Hyderabadi Dum Gosht [Mutton Biryani, Boneless - Serves 1]",
-                                                style: TextStyle(
-                                                  fontSize:
-                                                      MediaQuery.of(context)
-                                                              .size
-                                                              .width /
-                                                          85,
-                                                ),
-                                              ),
-                                            ),
-                                            SizedBox(
-                                              height: 10,
-                                            ),
-                                            Row(
-                                              children: <Widget>[
-                                                Text(
-                                                  "kg" +
-                                                      " X " +
-                                                      user
-                                                          .userModel
-                                                          .cart[index]
-                                                              ["unitQty"]
-                                                          .toString(),
-                                                ),
-                                                SizedBox(
-                                                  width: 40,
-                                                ),
-                                                Text(
-                                                  "Rs: " +
-                                                      (user.userModel
-                                                                  .cart[index]
-                                                              ["price"])
-                                                          .toString(),
-                                                  style: TextStyle(
-                                                      color: Colors.orange[700],
-                                                      fontWeight:
-                                                          FontWeight.bold),
-                                                ),
-                                              ],
-                                            ),
-                                            SizedBox(
-                                              height: 10,
-                                            ),
-                                          ],
+            _cartProvider.cartQty != 0
+                ? Column(
+                    children: [
+                      CartList(),
+
+                      // Coupon code exicution
+                      CouponWidget(),
+                      // Bill Detailed Card
+
+                      SizedBox(
+                        width: MediaQuery.of(context).size.width / 3.5,
+                        child: Card(
+                          child: Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  'Bill Detail',
+                                  style: TextStyle(fontWeight: FontWeight.bold),
+                                ),
+                                SizedBox(height: 10),
+                                Row(
+                                  children: [
+                                    Expanded(
+                                      child: Text(
+                                        'Cart value',
+                                        style: TextStyle(color: Colors.grey),
+                                      ),
+                                    ),
+                                    Text(
+                                      'Rs.  ' +
+                                          _cartProvider.subTotal.toString(),
+                                      style: TextStyle(color: Colors.grey),
+                                    ),
+                                  ],
+                                ),
+                                SizedBox(height: 10),
+                                Row(
+                                  children: [
+                                    Expanded(
+                                      child: Text(
+                                        'Discount ',
+                                        style: TextStyle(color: Colors.grey),
+                                      ),
+                                    ),
+                                    Text(
+                                      'Rs.  ' + discount.toString(),
+                                      style: TextStyle(color: Colors.grey),
+                                    ),
+                                  ],
+                                ),
+                                SizedBox(height: 10),
+                                Row(
+                                  children: [
+                                    Expanded(
+                                      child: Text(
+                                        'Delivery Charges ',
+                                        style: TextStyle(color: Colors.grey),
+                                      ),
+                                    ),
+                                    Text(
+                                      'Rs.  ' + deliveryFee.toString(),
+                                      style: TextStyle(color: Colors.grey),
+                                    ),
+                                  ],
+                                ),
+                                Divider(color: Colors.grey),
+                                Row(
+                                  children: [
+                                    Expanded(
+                                      child: Text(
+                                        'Total Amount Payble ',
+                                        style: TextStyle(
+                                            color: Colors.black,
+                                            fontWeight: FontWeight.bold),
+                                      ),
+                                    ),
+                                    Text(
+                                      'Rs.  ' + _payable.toStringAsFixed(0),
+                                      style: TextStyle(
+                                          color: Colors.black,
+                                          fontWeight: FontWeight.bold),
+                                    ),
+                                  ],
+                                ),
+                                SizedBox(height: 10),
+                                Container(
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(5),
+                                    color: Theme.of(context)
+                                        .primaryColor
+                                        .withOpacity(.3),
+                                  ),
+                                  child: Padding(
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: Row(
+                                      children: [
+                                        Expanded(
+                                          child: Text(
+                                            'Total Saving',
+                                            style:
+                                                TextStyle(color: Colors.green),
+                                          ),
                                         ),
-                                      )
-                                    ],
+                                        Text(_cartProvider.saving
+                                            .toStringAsFixed(0)),
+                                      ],
+                                    ),
                                   ),
                                 ),
-                              ),
-                              Column(
+                              ],
+                            ),
+                          ),
+                        ),
+                      ),
+                      Divider(thickness: 1, color: Colors.blueGrey),
+                      Container(
+                        height: 100,
+                        child: Column(
+                          children: [
+                            Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Row(
                                 mainAxisAlignment:
                                     MainAxisAlignment.spaceBetween,
                                 children: [
-                                  Row(
-                                    children: <Widget>[
-                                      IconButton(
-                                        icon: Icon(
-                                          Icons.remove_circle,
-                                          color: Colors.orange[500],
-                                        ),
-                                        onPressed: () async {
-                                          app.changeLoading();
-                                          bool value =
-                                              await user.removeFromCart(
-                                                  cartItem: user
-                                                      .userModel.cart[index]);
-                                          if (value) {
-                                            user.reloadUserModel();
-                                            print("Item Added to cart");
-                                            ScaffoldMessenger.of(context)
-                                                .showSnackBar(
-                                              SnackBar(
-                                                content:
-                                                    Text("Removed from Cart"),
-                                                duration: Duration(seconds: 1),
-                                              ),
-                                            );
-                                            user.reloadUserModel();
-                                            app.changeLoading();
-                                            return;
-                                          } else {
-                                            print("Item was not removed");
-                                            app.changeLoading();
-                                          }
-                                        },
-                                      ),
-                                      Text(2.toString()),
-                                      IconButton(
-                                        icon: Icon(
-                                          Icons.add_circle,
-                                          color: Colors.orange[500],
-                                        ),
-                                        onPressed: () {},
-                                      ),
-                                    ],
+                                  Text(
+                                    'Deliver to This Address',
+                                    style:
+                                        TextStyle(fontWeight: FontWeight.bold),
                                   ),
-                                  SizedBox(
-                                    height:
-                                        MediaQuery.of(context).size.width / 80,
-                                  ),
-                                  Row(
-                                    children: [
-                                      Text(
-                                        "Rs: " + (200 * 2).toString(),
-                                        style: TextStyle(
-                                            color: Colors.orange[700],
-                                            fontWeight: FontWeight.bold),
-                                      ),
-                                    ],
-                                  ),
+                                  Text(
+                                    'Change',
+                                    style: TextStyle(color: Colors.red),
+                                  )
                                 ],
                               ),
-                            ],
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: Divider(),
-                          ),
-                        ],
-                      );
-                    })
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.all(12.0),
+                              child: Text(
+                                  'Flat No 205, Nanda block, Mahavir Enclave 1, Near Jamun gali Delhi 110045'),
+                            )
+                          ],
+                        ),
+                      ),
+                      CodToggleSwitch(),
+                    ],
+                  )
                 : Container(
                     height: 300,
                     child: Center(
                       child: Text("Your Cart Is Empty"),
                     ),
                   ),
-            // Row(
-            //   children: <Widget>[
-            //     Expanded(
-            //       child: Container(
-            //         padding: EdgeInsets.only(left: 8, right: 5),
-            //         child: Column(
-            //           crossAxisAlignment: CrossAxisAlignment.start,
-            //           children: <Widget>[
-            //             Container(
-            //               width: MediaQuery.of(context).size.width / 6,
-            //               child: Column(
-            //                 crossAxisAlignment: CrossAxisAlignment.start,
-            //                 children: [
-            //                   RichText(
-            //                     text: TextSpan(
-            //                       text:
-            //                           "Hyderabadi Dum Gosht [Mutton Biryani, Boneless - Serves 1]",
-            //                       style: TextStyle(
-            //                         fontSize:
-            //                             MediaQuery.of(context).size.width / 85,
-            //                       ),
-            //                     ),
-            //                   ),
-            //                   SizedBox(
-            //                     height: 10,
-            //                   ),
-            //                   Row(
-            //                     children: <Widget>[
-            //                       Text(
-            //                         "kg" + " X " + "2",
-            //                       ),
-            //                       SizedBox(
-            //                         width: 40,
-            //                       ),
-            //                       Text("Rs: " + (200 * 2).toString(),
-            //                           style: TextStyle(
-            //                               color: Colors.orange[700],
-            //                               fontWeight: FontWeight.bold)),
-            //                     ],
-            //                   ),
-            //                   SizedBox(
-            //                     height: 10,
-            //                   ),
-            //                 ],
-            //               ),
-            //             )
-            //           ],
-            //         ),
-            //       ),
-            //     ),
-            //     Column(
-            //       mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            //       children: [
-            //         Row(
-            //           children: <Widget>[
-            //             IconButton(
-            //                 icon: Icon(
-            //                   Icons.remove_circle,
-            //                   color: Colors.orange[500],
-            //                 ),
-            //                 onPressed: () {}),
-            //             Text(2.toString()),
-            //             IconButton(
-            //               icon: Icon(
-            //                 Icons.add_circle,
-            //                 color: Colors.orange[500],
-            //               ),
-            //               onPressed: () {},
-            //             ),
-            //           ],
-            //         ),
-            //         SizedBox(
-            //           height: MediaQuery.of(context).size.width / 80,
-            //         ),
-            //         Row(
-            //           children: [
-            //             Text(
-            //               "Rs: " + (200 * 2).toString(),
-            //               style: TextStyle(
-            //                   color: Colors.orange[700],
-            //                   fontWeight: FontWeight.bold),
-            //             ),
-            //           ],
-            //         ),
-            //       ],
-            //     ),
-            //   ],
-            // ),
-            // Padding(
-            //   padding: const EdgeInsets.all(8.0),
-            //   child: Divider(),
-            // ),
             Divider(
               color: Colors.black,
               thickness: 2,
@@ -304,14 +232,27 @@ class _CartState extends State<Cart> {
                 children: <Widget>[
                   Expanded(
                     child: Text(
-                      "Total: Rs. " + 400.toString(),
+                      "Total: Rs. " + _payable.toString(),
                       style: TextStyle(fontWeight: FontWeight.bold),
                     ),
                   ),
                   Expanded(
                     child: MaterialButton(
                       color: Colors.green[500],
-                      onPressed: () {},
+                      height: 40,
+                      onPressed: () {
+                        _userService.getUserById(user.uid).then((value) {
+                          if (value.name == null) {
+                            changeScreen(context, LoginPage());
+                          } else {
+                            if (_cartProvider.cod == true) {
+                              print("Cash on Delivery");
+                            } else {
+                              print('Will pay Online');
+                            }
+                          }
+                        });
+                      },
                       child: Text(
                         "Checkout",
                         style: TextStyle(color: Colors.white),

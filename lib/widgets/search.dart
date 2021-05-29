@@ -1,10 +1,10 @@
+// ignore: avoid_web_libraries_in_flutter
 import 'dart:js';
 
 import 'package:flutter/material.dart';
 import 'package:geodesy/geodesy.dart';
 import 'package:sync_biryani_web/location/utilities/api.dart';
 import 'package:sync_biryani_web/location/utilities/loc.dart';
-import 'package:sync_biryani_web/screens/product_page.dart';
 import 'package:sync_biryani_web/screens/second_screen/second_page.dart';
 import 'package:sync_biryani_web/services/comman_services.dart';
 
@@ -279,6 +279,7 @@ class _SearchBoxState extends State<SearchBox> {
         _latitude = pos.coords.latitude;
         _longitude = pos.coords.longitude;
       });
+      return;
     }));
   }
 

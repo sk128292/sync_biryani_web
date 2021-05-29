@@ -13,7 +13,7 @@ class ProductModel {
   String _id;
   String _name;
   String _image;
-  String _price;
+  int _price;
   String _category;
   String _description;
   bool _available;
@@ -26,7 +26,7 @@ class ProductModel {
   String get image => _image;
   String get category => _category;
   String get description => _description;
-  String get price => _price;
+  int get price => _price;
   int get unitQty => _unitQty;
   bool get featured => _available;
 
