@@ -4,7 +4,8 @@ import 'package:flutter/material.dart';
 class CouponProvider with ChangeNotifier {
   CouponProvider.initialize();
   bool expired;
-  DocumentSnapshot document;
+  String title = '';
+  String details = '';
   int discountRate = 0;
 
   Future<DocumentSnapshot> getCouponDetails(title) async {
@@ -24,7 +25,9 @@ class CouponProvider with ChangeNotifier {
       this.expired = true;
       notifyListeners();
     } else {
-      this.document = document;
+      this.title = document.data()['title'];
+      this.details = document.data()['details'];
+
       this.expired = false;
       this.discountRate = document.data()['discountRate'];
       notifyListeners();

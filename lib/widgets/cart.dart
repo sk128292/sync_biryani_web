@@ -3,10 +3,14 @@ import 'dart:html';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:provider/provider.dart';
 import 'package:sync_biryani_web/helpers/screen_navigation.dart';
 import 'package:sync_biryani_web/provider/cart_provider.dart';
+import 'package:sync_biryani_web/provider/coupon_provider.dart';
 import 'package:sync_biryani_web/screens/login.dart';
+import 'package:sync_biryani_web/services/cart_service.dart';
+import 'package:sync_biryani_web/services/order_services.dart';
 import 'package:sync_biryani_web/services/user_services.dart';
 import 'package:sync_biryani_web/widgets/cart/cart_list.dart';
 import 'package:sync_biryani_web/widgets/cart/cod_toggle.dart';
@@ -21,17 +25,24 @@ class Cart extends StatefulWidget {
 }
 
 class _CartState extends State<Cart> {
-  int discount = 30;
+  UserServices _userService = UserServices();
+  OrderServices _orderServices = OrderServices();
+  CartService _cartService = CartService();
+  User user = FirebaseAuth.instance.currentUser;
+
   int deliveryFee = 50;
+  double discount = 0;
 
   @override
   Widget build(BuildContext context) {
-    UserServices _userService = UserServices();
-    User user = FirebaseAuth.instance.currentUser;
-
-    DocumentSnapshot doc;
     var _cartProvider = Provider.of<CartProvider>(context);
+    var _coupon = Provider.of<CouponProvider>(context);
     _cartProvider.getCartTotal();
+    double subTotal = _cartProvider.subTotal;
+    double discountRate = _coupon.discountRate / 100;
+    setState(() {
+      discount = (subTotal * discountRate);
+    });
     var _payable = _cartProvider.subTotal + deliveryFee - discount;
 
     return Card(
@@ -104,20 +115,21 @@ class _CartState extends State<Cart> {
                                   ],
                                 ),
                                 SizedBox(height: 10),
-                                Row(
-                                  children: [
-                                    Expanded(
-                                      child: Text(
-                                        'Discount ',
+                                if (discount > 0)
+                                  Row(
+                                    children: [
+                                      Expanded(
+                                        child: Text(
+                                          'Discount ',
+                                          style: TextStyle(color: Colors.grey),
+                                        ),
+                                      ),
+                                      Text(
+                                        'Rs.  ' + discount.toStringAsFixed(0),
                                         style: TextStyle(color: Colors.grey),
                                       ),
-                                    ),
-                                    Text(
-                                      'Rs.  ' + discount.toString(),
-                                      style: TextStyle(color: Colors.grey),
-                                    ),
-                                  ],
-                                ),
+                                    ],
+                                  ),
                                 SizedBox(height: 10),
                                 Row(
                                   children: [
@@ -232,7 +244,7 @@ class _CartState extends State<Cart> {
                 children: <Widget>[
                   Expanded(
                     child: Text(
-                      "Total: Rs. " + _payable.toString(),
+                      "Total: Rs. " + _payable.toStringAsFixed(0),
                       style: TextStyle(fontWeight: FontWeight.bold),
                     ),
                   ),
@@ -245,11 +257,9 @@ class _CartState extends State<Cart> {
                           if (value.name == null) {
                             changeScreen(context, LoginPage());
                           } else {
-                            if (_cartProvider.cod == true) {
-                              print("Cash on Delivery");
-                            } else {
-                              print('Will pay Online');
-                            }
+                            EasyLoading.show(status: 'Please Wait...');
+                            // TODO: Payment Gateway intigration
+                            _saveOrder(_cartProvider, _payable, _coupon);
                           }
                         });
                       },
@@ -266,5 +276,31 @@ class _CartState extends State<Cart> {
         ),
       ),
     );
+  }
+
+  _saveOrder(CartProvider cartProvider, payable, CouponProvider coupon) {
+    _orderServices.saveOrder({
+      'products': cartProvider.cartList,
+      'userId': user.uid,
+      'deliveryFee': deliveryFee,
+      'totalPayable': payable,
+      'discount': discount.toStringAsFixed(0),
+      'cod': cartProvider.cod, // cod or not
+      'discountCoupon': coupon == null ? null : coupon.title,
+      'timeStamp': DateTime.now().toString(),
+      'orderStatus': 'Ordered',
+      'deliveryBoy': {
+        'name': '',
+        'phone': '',
+        'location': '',
+      },
+    }).then((value) {
+      // After Submitting order clear Cart
+      _cartService.deleteCart().then((value) {
+        _cartService.checkData().then((value) {
+          EasyLoading.showSuccess('Your Order Is Submitted');
+        });
+      });
+    });
   }
 }

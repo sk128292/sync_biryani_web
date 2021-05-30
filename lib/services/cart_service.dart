@@ -60,4 +60,13 @@ class CartService {
       cart.doc(user.uid).delete();
     }
   }
+
+  Future<void> deleteCart() async {
+    final result =
+        await cart.doc(user.uid).collection('products').get().then((snapshot) {
+      for (DocumentSnapshot ds in snapshot.docs) {
+        ds.reference.delete();
+      }
+    });
+  }
 }

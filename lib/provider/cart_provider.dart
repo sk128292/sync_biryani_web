@@ -9,6 +9,7 @@ class CartProvider with ChangeNotifier {
   QuerySnapshot snapshot;
   double saving = 0.0;
   bool cod = false;
+  List cartList = [];
 
   CartProvider.initialize() {
     getCartTotal();
@@ -17,6 +18,7 @@ class CartProvider with ChangeNotifier {
   Future<double> getCartTotal() async {
     var cartTotal = 0.0;
     var saving = 0.0;
+    List _newList = [];
 
     QuerySnapshot snapshot = await _cartService.cart
         .doc(_cartService.user.uid)
@@ -26,6 +28,11 @@ class CartProvider with ChangeNotifier {
       return null;
     }
     snapshot.docs.forEach((doc) {
+      if (!_newList.contains(doc.data())) {
+        _newList.add(doc.data());
+        this.cartList = _newList;
+        notifyListeners();
+      }
       cartTotal = cartTotal + doc.data()['total'];
       saving = saving +
           (((doc.data()['comparedPrice'] * doc.data()['unitQty']) -

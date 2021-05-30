@@ -3,6 +3,7 @@ import 'dart:html';
 import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:provider/provider.dart';
 import 'package:sync_biryani_web/provider/coupon_provider.dart';
 
@@ -67,6 +68,7 @@ class _CouponWidgetState extends State<CouponWidget> {
                     child: MaterialButton(
                       color: color,
                       onPressed: () {
+                        EasyLoading.show(status: 'Validating Coupon...');
                         _coupon
                             .getCouponDetails(_couponText.text)
                             .then((value) {
@@ -75,6 +77,7 @@ class _CouponWidgetState extends State<CouponWidget> {
                               _coupon.discountRate = 0;
                               _visible = false;
                             });
+                            EasyLoading.dismiss();
                             showDialoge(_couponText.text, 'Not Valid');
                             return;
                           }
@@ -82,6 +85,7 @@ class _CouponWidgetState extends State<CouponWidget> {
                             setState(() {
                               _visible = true;
                             });
+                            EasyLoading.dismiss();
                             return;
                           }
                           if (_coupon.expired == true) {
@@ -89,10 +93,10 @@ class _CouponWidgetState extends State<CouponWidget> {
                               _coupon.discountRate = 0;
                               _visible = false;
                             });
+                            EasyLoading.dismiss();
                             showDialoge(_couponText.text, 'Expired');
                           }
                         });
-                        print(_coupon.document.data()['title']);
                       },
                       child: Text(
                         'Apply',
@@ -124,12 +128,12 @@ class _CouponWidgetState extends State<CouponWidget> {
                           children: [
                             Padding(
                               padding: const EdgeInsets.only(top: 4.0),
-                              child: Text(
-                                  _coupon.document.data()['title'].toString()),
+                              child: Text(_coupon.title),
                             ),
                             Divider(color: Colors.grey),
-                            Text('New year Special Discount'),
-                            Text('20% discount on total order'),
+                            Text(_coupon.details),
+                            Text(_coupon.discountRate.toString() +
+                                ' % discount on total order'),
                             SizedBox(height: 10),
                           ],
                         ),
@@ -138,7 +142,13 @@ class _CouponWidgetState extends State<CouponWidget> {
                         right: -5,
                         top: -5,
                         child: IconButton(
-                          onPressed: () {},
+                          onPressed: () {
+                            setState(() {
+                              _coupon.discountRate = 0;
+                              _visible = false;
+                              _couponText.clear();
+                            });
+                          },
                           icon: Icon(Icons.clear),
                         ),
                       ),
@@ -158,7 +168,7 @@ class _CouponWidgetState extends State<CouponWidget> {
         context: context,
         builder: (BuildContext context) {
           return CupertinoAlertDialog(
-            title: Text('Apply Coupon'),
+            title: Text('Invalid Coupon'),
             content: Text(
                 'This Discount Coupon $code you have entered is $validity. Please try with another Code'),
             actions: [
