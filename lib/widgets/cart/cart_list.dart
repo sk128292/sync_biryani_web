@@ -30,6 +30,7 @@ class _CartListState extends State<CartList> {
 
         return new ListView(
           shrinkWrap: true,
+          physics: NeverScrollableScrollPhysics(),
           children: snapshot.data.docs.map((DocumentSnapshot document) {
             return CartCard(document);
           }).toList(),

@@ -8,6 +8,7 @@ import 'package:sync_biryani_web/provider/app_provider.dart';
 import 'package:sync_biryani_web/provider/cart_provider.dart';
 import 'package:sync_biryani_web/provider/category_provider.dart';
 import 'package:sync_biryani_web/provider/coupon_provider.dart';
+import 'package:sync_biryani_web/provider/order_provider.dart';
 import 'package:sync_biryani_web/provider/product_provider.dart';
 import 'package:sync_biryani_web/provider/user_provider.dart';
 import 'package:sync_biryani_web/screens/home_page.dart';
@@ -31,6 +32,7 @@ Future<void> main() async {
         ChangeNotifierProvider.value(value: CartProvider.initialize()),
         ChangeNotifierProvider.value(value: ProductProvider.initialize()),
         ChangeNotifierProvider.value(value: CouponProvider.initialize()),
+        ChangeNotifierProvider.value(value: OrderProvider.initialize()),
       ],
       child: MaterialApp(
         title: 'Synchrotron Biryani',
