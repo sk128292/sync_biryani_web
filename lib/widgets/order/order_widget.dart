@@ -94,9 +94,31 @@ class _OrderWidgetState extends State<OrderWidget> {
                             leading: CircleAvatar(
                               backgroundColor: Colors.white,
                               radius: 14,
-                              child: Icon(CupertinoIcons.square_list),
+                              child: Icon(
+                                CupertinoIcons.square_list,
+                                color:
+                                    document.data()['orderStatus'] == 'Rejected'
+                                        ? Colors.red
+                                        : document.data()['orderStatus'] ==
+                                                'Accepted'
+                                            ? Colors.orange
+                                            : Colors.orange,
+                              ),
                             ),
-                            title: Text(document.data()['orderStatus']),
+                            title: Text(
+                              document.data()['orderStatus'],
+                              style: TextStyle(
+                                fontSize: 14,
+                                fontWeight: FontWeight.bold,
+                                color:
+                                    document.data()['orderStatus'] == 'Rejected'
+                                        ? Colors.red
+                                        : document.data()['orderStatus'] ==
+                                                'Accepted'
+                                            ? Colors.orange
+                                            : Colors.orange,
+                              ),
+                            ),
                             subtitle: Text(
                               'on ' +
                                   DateFormat.yMMMd().format(
