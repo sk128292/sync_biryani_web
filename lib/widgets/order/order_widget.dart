@@ -27,6 +27,25 @@ class _OrderWidgetState extends State<OrderWidget> {
     'Delivered',
   ];
 
+  Color statusColor(DocumentSnapshot document) {
+    if (document.data()['orderStatus'] == 'Accepted') {
+      return Colors.blueGrey[400];
+    }
+    if (document.data()['orderStatus'] == 'Rejected') {
+      return Colors.red;
+    }
+    if (document.data()['orderStatus'] == 'Picked Up') {
+      return Colors.pink[900];
+    }
+    if (document.data()['orderStatus'] == 'On The Way') {
+      return Colors.purple[900];
+    }
+    if (document.data()['orderStatus'] == 'Delivered') {
+      return Colors.green;
+    }
+    return Colors.orange;
+  }
+
   @override
   Widget build(BuildContext context) {
     var _orderProvider = Provider.of<OrderProvider>(context);
@@ -96,13 +115,7 @@ class _OrderWidgetState extends State<OrderWidget> {
                               radius: 14,
                               child: Icon(
                                 CupertinoIcons.square_list,
-                                color:
-                                    document.data()['orderStatus'] == 'Rejected'
-                                        ? Colors.red
-                                        : document.data()['orderStatus'] ==
-                                                'Accepted'
-                                            ? Colors.orange
-                                            : Colors.orange,
+                                color: statusColor(document),
                               ),
                             ),
                             title: Text(
@@ -110,13 +123,7 @@ class _OrderWidgetState extends State<OrderWidget> {
                               style: TextStyle(
                                 fontSize: 14,
                                 fontWeight: FontWeight.bold,
-                                color:
-                                    document.data()['orderStatus'] == 'Rejected'
-                                        ? Colors.red
-                                        : document.data()['orderStatus'] ==
-                                                'Accepted'
-                                            ? Colors.orange
-                                            : Colors.orange,
+                                color: statusColor(document),
                               ),
                             ),
                             subtitle: Text(
