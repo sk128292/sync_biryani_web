@@ -1,6 +1,6 @@
 import 'package:carousel_pro/carousel_pro.dart';
+import 'package:chips_choice/chips_choice.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/scheduler.dart';
 import 'package:sync_biryani_web/widgets/cart.dart';
 import 'package:sync_biryani_web/widgets/footer.dart';
 import 'package:sync_biryani_web/widgets/responsive.dart';
@@ -17,6 +17,8 @@ class ProductScreen extends StatefulWidget {
 
 class _ProductScreenState extends State<ProductScreen> {
   double _opacity = 0.6;
+  int tag = 0;
+  List<String> options = ['All ', 'Veg Only', 'Non-Veg Only'];
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -87,89 +89,53 @@ class _ProductScreenState extends State<ProductScreen> {
             ),
           ),
           SizedBox(height: 30),
+          Padding(
+            padding: const EdgeInsets.only(left: 20, right: 20),
+            child: Divider(thickness: 1, color: Colors.black),
+          ),
           Container(
             padding: EdgeInsets.only(left: 50, right: 50),
-            height: 35,
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(
                   "Collection",
                   style: TextStyle(
-                      color: Colors.white,
+                      color: Colors.black,
                       fontWeight: FontWeight.w600,
                       fontSize: 20),
                 ),
-                Row(
-                  children: [
-                    Container(
-                      width: 100,
-                      color: Colors.blueGrey,
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Text(
-                            "Veg Only",
-                            style: TextStyle(
-                                color: Colors.white,
-                                fontWeight: FontWeight.w600),
-                          ),
-                          Checkbox(
-                            activeColor: Colors.green,
-                            checkColor: Colors.white,
-                            value: timeDilation != 1,
-                            onChanged: (bool value) {
-                              setState(() {
-                                timeDilation = value ? 2 : 1;
-                              });
-                            },
-                          ),
-                        ],
-                      ),
+                Container(
+                  height: 50,
+                  child: ChipsChoice<int>.single(
+                    choiceStyle: C2ChoiceStyle(
+                      borderRadius: BorderRadius.all(Radius.circular(4)),
                     ),
-                    SizedBox(width: 10),
-                    Container(
-                      width: 140,
-                      color: Colors.blueGrey,
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Text(
-                            "Non-Veg Only",
-                            style: TextStyle(
-                                color: Colors.white,
-                                fontWeight: FontWeight.w600),
-                          ),
-                          Checkbox(
-                            activeColor: Colors.green,
-                            checkColor: Colors.white,
-                            value: timeDilation != 3,
-                            onChanged: (bool value) {
-                              setState(() {
-                                timeDilation = value ? 4.0 : 3.0;
-                              });
-                            },
-                          ),
-                        ],
-                      ),
+                    value: tag,
+                    onChanged: (val) {
+                      if (val == 0) {
+                        setState(() {
+                          // _orderProvider.status = null;
+                        });
+                      }
+                      setState(() {
+                        tag = val;
+                        // _orderProvider.status = options[val];
+                      });
+                    },
+                    choiceItems: C2Choice.listFrom<int, String>(
+                      source: options,
+                      value: (i, v) => i,
+                      label: (i, v) => v,
                     ),
-                  ],
+                  ),
                 ),
               ],
             ),
           ),
           Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Container(
-                  height: 2,
-                  width: MediaQuery.of(context).size.width / 1.05,
-                  color: Colors.white,
-                ),
-              ],
-            ),
+            padding: const EdgeInsets.only(left: 20, right: 20),
+            child: Divider(thickness: 1, color: Colors.black),
           ),
           Padding(
               padding: const EdgeInsets.all(25.0),
