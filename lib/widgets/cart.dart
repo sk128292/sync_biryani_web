@@ -25,10 +25,13 @@ class Cart extends StatefulWidget {
 }
 
 class _CartState extends State<Cart> {
+  final _formKey = GlobalKey<FormState>();
   UserServices _userService = UserServices();
   OrderServices _orderServices = OrderServices();
   CartService _cartService = CartService();
   User user = FirebaseAuth.instance.currentUser;
+
+  var _addressTextController = TextEditingController();
 
   int deliveryFee = 50;
   double discount = 0;
@@ -196,7 +199,7 @@ class _CartState extends State<Cart> {
                       ),
                       Divider(thickness: 1, color: Colors.blueGrey),
                       Container(
-                        height: 100,
+                        // height: 100,
                         child: Column(
                           children: [
                             Padding(
@@ -210,17 +213,56 @@ class _CartState extends State<Cart> {
                                     style:
                                         TextStyle(fontWeight: FontWeight.bold),
                                   ),
-                                  Text(
-                                    'Change',
-                                    style: TextStyle(color: Colors.red),
-                                  )
+                                  // Text(
+                                  //   'Change',
+                                  //   style: TextStyle(color: Colors.red),
+                                  // )
                                 ],
                               ),
                             ),
                             Padding(
                               padding: const EdgeInsets.all(12.0),
-                              child: Text(
-                                  'Flat No 205, Nanda block, Mahavir Enclave 1, Near Jamun gali Delhi 110045'),
+                              child: TextField(
+                                key: _formKey,
+                                controller: _addressTextController,
+                                maxLines: 3,
+                                decoration: InputDecoration(
+                                  border: OutlineInputBorder(),
+                                  // prefixIcon: Icon(Icons.contact_mail_outlined),
+                                  labelText: 'Delivery Address',
+                                  // suffixIcon: IconButton(
+                                  //   icon: Icon(Icons.location_searching_sharp,
+                                  //       color: Colors.red),
+                                  //   onPressed: () {
+                                  // _addressTextController.text =
+                                  //     "Locating... 'Please Wait..'";
+                                  // _authData.getCurrentAddress().then((address) {
+                                  //   if (address != null) {
+                                  //     setState(() {
+                                  //       _addressTextController.text =
+                                  //           '${_authData.placeName}\n${_authData.shopAddress}';
+                                  //     });
+                                  //   } else {
+                                  //     ScaffoldMessenger.of(context).showSnackBar(
+                                  //       SnackBar(
+                                  //         content: Text(
+                                  //             " Couldn't find location try again.."),
+                                  //       ),
+                                  //     );
+                                  //   }
+                                  // });
+                                  // },
+                                  // ),
+                                  enabledBorder: OutlineInputBorder(),
+                                  focusedBorder: OutlineInputBorder(
+                                    borderSide: BorderSide(
+                                      width: 2,
+                                      color: Colors.green,
+                                    ),
+                                  ),
+                                  focusColor: Colors.green,
+                                ),
+                              ),
                             )
                           ],
                         ),
@@ -282,6 +324,7 @@ class _CartState extends State<Cart> {
     _orderServices.saveOrder({
       'products': cartProvider.cartList,
       'userId': user.uid,
+      'deliveryAddress': _addressTextController.text,
       'deliveryFee': deliveryFee,
       'totalPayable': payable,
       'discount': discount.toStringAsFixed(0),
