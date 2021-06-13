@@ -27,25 +27,6 @@ class _OrderWidgetState extends State<OrderWidget> {
     'Delivered',
   ];
 
-  Color statusColor(DocumentSnapshot document) {
-    if (document.data()['orderStatus'] == 'Accepted') {
-      return Colors.blueGrey[400];
-    }
-    if (document.data()['orderStatus'] == 'Rejected') {
-      return Colors.red;
-    }
-    if (document.data()['orderStatus'] == 'Picked Up') {
-      return Colors.pink[900];
-    }
-    if (document.data()['orderStatus'] == 'On The Way') {
-      return Colors.purple[900];
-    }
-    if (document.data()['orderStatus'] == 'Delivered') {
-      return Colors.green;
-    }
-    return Colors.orange;
-  }
-
   @override
   Widget build(BuildContext context) {
     var _orderProvider = Provider.of<OrderProvider>(context);
@@ -113,17 +94,14 @@ class _OrderWidgetState extends State<OrderWidget> {
                             leading: CircleAvatar(
                               backgroundColor: Colors.white,
                               radius: 14,
-                              child: Icon(
-                                CupertinoIcons.square_list,
-                                color: statusColor(document),
-                              ),
+                              child: _orderServices.statusIcon(document),
                             ),
                             title: Text(
                               document.data()['orderStatus'],
                               style: TextStyle(
                                 fontSize: 14,
                                 fontWeight: FontWeight.bold,
-                                color: statusColor(document),
+                                color: _orderServices.statusColor(document),
                               ),
                             ),
                             subtitle: Text(
@@ -150,6 +128,26 @@ class _OrderWidgetState extends State<OrderWidget> {
                               ],
                             ),
                           ),
+                          //  Delivery boy Contact
+                          if (document.data()['deliveryBoy']['name'] > 2)
+                            Padding(
+                              padding:
+                                  const EdgeInsets.only(left: 10, right: 10),
+                              child: ListTile(
+                                tileColor: Colors.grey[300],
+                                leading: CircleAvatar(
+                                  backgroundColor: Colors.white,
+                                  child: Image.network(
+                                    document.data()['deliveryBoy']['image'],
+                                  ),
+                                ),
+                                title: Text(
+                                    document.data()['deliveryBoy']['name']),
+                                subtitle: Text(
+                                  _orderServices.statusComment(document),
+                                ),
+                              ),
+                            ),
                           ExpansionTile(
                             title: Text(
                               'Order Details',

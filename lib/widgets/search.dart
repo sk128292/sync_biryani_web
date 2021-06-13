@@ -127,8 +127,7 @@ class _SearchBoxState extends State<SearchBox> {
                         if (distance >= 10) {
                           _services.showMyDialog(
                             title: 'Delivery Unavailable',
-                            message:
-                                'You Location is more than change your Location',
+                            message: 'You Location is more than 10 km',
                             context: context,
                           );
                         } else {

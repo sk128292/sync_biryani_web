@@ -1,15 +1,20 @@
 import 'dart:html';
+import 'dart:js';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
+import 'package:geodesy/geodesy.dart';
 import 'package:provider/provider.dart';
 import 'package:sync_biryani_web/helpers/screen_navigation.dart';
+import 'package:sync_biryani_web/location/utilities/api.dart';
+import 'package:sync_biryani_web/location/utilities/loc.dart';
 import 'package:sync_biryani_web/provider/cart_provider.dart';
 import 'package:sync_biryani_web/provider/coupon_provider.dart';
 import 'package:sync_biryani_web/screens/login.dart';
 import 'package:sync_biryani_web/services/cart_service.dart';
+import 'package:sync_biryani_web/services/comman_services.dart';
 import 'package:sync_biryani_web/services/order_services.dart';
 import 'package:sync_biryani_web/services/user_services.dart';
 import 'package:sync_biryani_web/widgets/cart/cart_list.dart';
@@ -33,8 +38,17 @@ class _CartState extends State<Cart> {
 
   var _addressTextController = TextEditingController();
 
+  var _contactNumberTextController = TextEditingController();
+
   int deliveryFee = 50;
   double discount = 0;
+  bool _visible = false;
+  CommanServices _services = CommanServices();
+  Geodesy geodesy = Geodesy();
+
+  String _city = '';
+  double _latitude = 0.0;
+  double _longitude = 0.0;
 
   @override
   Widget build(BuildContext context) {
@@ -213,54 +227,153 @@ class _CartState extends State<Cart> {
                                     style:
                                         TextStyle(fontWeight: FontWeight.bold),
                                   ),
-                                  // Text(
-                                  //   'Change',
-                                  //   style: TextStyle(color: Colors.red),
-                                  // )
                                 ],
                               ),
                             ),
                             Padding(
-                              padding: const EdgeInsets.all(12.0),
-                              child: TextField(
-                                key: _formKey,
-                                controller: _addressTextController,
-                                maxLines: 3,
-                                decoration: InputDecoration(
-                                  border: OutlineInputBorder(),
-                                  // prefixIcon: Icon(Icons.contact_mail_outlined),
-                                  labelText: 'Delivery Address',
-                                  // suffixIcon: IconButton(
-                                  //   icon: Icon(Icons.location_searching_sharp,
-                                  //       color: Colors.red),
-                                  //   onPressed: () {
-                                  // _addressTextController.text =
-                                  //     "Locating... 'Please Wait..'";
-                                  // _authData.getCurrentAddress().then((address) {
-                                  //   if (address != null) {
-                                  //     setState(() {
-                                  //       _addressTextController.text =
-                                  //           '${_authData.placeName}\n${_authData.shopAddress}';
-                                  //     });
-                                  //   } else {
-                                  //     ScaffoldMessenger.of(context).showSnackBar(
-                                  //       SnackBar(
-                                  //         content: Text(
-                                  //             " Couldn't find location try again.."),
-                                  //       ),
-                                  //     );
-                                  //   }
-                                  // });
-                                  // },
-                                  // ),
-                                  enabledBorder: OutlineInputBorder(),
-                                  focusedBorder: OutlineInputBorder(
-                                    borderSide: BorderSide(
-                                      width: 2,
-                                      color: Colors.green,
+                              padding: EdgeInsets.only(
+                                  left: 8, right: 8, bottom: 10),
+                              child: Row(
+                                children: [
+                                  Expanded(
+                                    child: SizedBox(
+                                      height: 30,
+                                      child: TextField(
+                                        enabled: false,
+                                        textInputAction: TextInputAction.done,
+                                        onSubmitted: (String city) {
+                                          setState(() {
+                                            _city = city;
+                                          });
+                                        },
+                                        decoration: InputDecoration(
+                                          border: OutlineInputBorder(),
+                                          filled: true,
+                                          fillColor: Colors.grey[300],
+                                          hintStyle:
+                                              TextStyle(color: Colors.grey),
+                                          contentPadding:
+                                              EdgeInsets.only(left: 10),
+                                          hintText: _city.isEmpty
+                                              ? "Check Availablity"
+                                              : '$_city',
+                                        ),
+                                      ),
                                     ),
                                   ),
-                                  focusColor: Colors.green,
+                                  SizedBox(width: 5),
+                                  _city.isEmpty
+                                      ? SizedBox(
+                                          height: 30,
+                                          child: MaterialButton(
+                                            color: Colors.red,
+                                            onPressed: () async {
+                                              final _val = await LocationAPI()
+                                                  .fetchData();
+                                              setState(
+                                                () {
+                                                  _city = _val;
+                                                },
+                                              );
+                                              getLat();
+                                            },
+                                            child: Text(
+                                              'Get Location',
+                                              style: TextStyle(
+                                                  color: Colors.white),
+                                            ),
+                                          ),
+                                        )
+                                      : SizedBox(
+                                          height: 30,
+                                          child: MaterialButton(
+                                            color: Colors.lightGreen,
+                                            onPressed: () {
+                                              LatLng l2 =
+                                                  LatLng(_latitude, _longitude);
+                                              LatLng l1 =
+                                                  LatLng(28.599365, 77.074882);
+                                              num distance = (geodesy
+                                                      .distanceBetweenTwoGeoPoints(
+                                                          l1, l2)) /
+                                                  1000;
+                                              print('Distance From Store: ' +
+                                                  distance.toStringAsFixed(2) +
+                                                  ' Km');
+                                              if (distance >= 10) {
+                                                _services.showMyDialog(
+                                                  title: 'Delivery Unavailable',
+                                                  message:
+                                                      'You Location is more than 10 km Please Try again after come in our delivery range',
+                                                  context: context,
+                                                );
+                                              } else {
+                                                setState(() {
+                                                  _visible = true;
+                                                });
+                                              }
+                                            },
+                                            child: Text(
+                                              'Check Availability',
+                                              style: TextStyle(
+                                                  color: Colors.white),
+                                            ),
+                                          ),
+                                        ),
+                                ],
+                              ),
+                            ),
+                            Visibility(
+                              visible: _visible,
+                              child: Padding(
+                                padding: const EdgeInsets.all(12.0),
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      'Delivery Available Please Enter Details',
+                                      style: TextStyle(
+                                          fontWeight: FontWeight.bold,
+                                          color: Colors.green),
+                                    ),
+                                    SizedBox(
+                                      height: 40,
+                                      child: TextField(
+                                        keyboardType: TextInputType.number,
+                                        controller:
+                                            _contactNumberTextController,
+                                        decoration: InputDecoration(
+                                          border: OutlineInputBorder(),
+                                          labelText: 'Contact Number',
+                                          enabledBorder: OutlineInputBorder(),
+                                          focusedBorder: OutlineInputBorder(
+                                            borderSide: BorderSide(
+                                              width: 2,
+                                              color: Colors.green,
+                                            ),
+                                          ),
+                                          focusColor: Colors.green,
+                                        ),
+                                      ),
+                                    ),
+                                    SizedBox(height: 5),
+                                    TextField(
+                                      controller: _addressTextController,
+                                      maxLines: 3,
+                                      decoration: InputDecoration(
+                                        border: OutlineInputBorder(),
+                                        labelText: 'Enter Address',
+                                        enabledBorder: OutlineInputBorder(),
+                                        focusedBorder: OutlineInputBorder(
+                                          borderSide: BorderSide(
+                                            width: 2,
+                                            color: Colors.green,
+                                          ),
+                                        ),
+                                        focusColor: Colors.green,
+                                      ),
+                                    ),
+                                  ],
                                 ),
                               ),
                             )
@@ -322,9 +435,12 @@ class _CartState extends State<Cart> {
 
   _saveOrder(CartProvider cartProvider, payable, CouponProvider coupon) {
     _orderServices.saveOrder({
+      'orderId': DateTime.now().microsecondsSinceEpoch.toString(),
       'products': cartProvider.cartList,
       'userId': user.uid,
+      'contactNumber': _contactNumberTextController.text,
       'deliveryAddress': _addressTextController.text,
+      'location': GeoPoint(this._latitude, this._longitude),
       'deliveryFee': deliveryFee,
       'totalPayable': payable,
       'discount': discount.toStringAsFixed(0),
@@ -341,9 +457,36 @@ class _CartState extends State<Cart> {
       // After Submitting order clear Cart
       _cartService.deleteCart().then((value) {
         _cartService.checkData().then((value) {
+          _addressTextController.clear();
+          _contactNumberTextController.clear();
+          setState(() {
+            _city = null;
+          });
           EasyLoading.showSuccess('Your Order Is Submitted');
         });
       });
     });
+  }
+
+  void getLat() {
+    getCurrentPosition(allowInterop((pos) {
+      setState(() {
+        _latitude = pos.coords.latitude;
+        _longitude = pos.coords.longitude;
+      });
+      return;
+    }));
+  }
+
+  void calculateDistance() {
+    Geodesy geodesy = Geodesy();
+
+    LatLng l1 = LatLng(28.599365, 77.074882);
+    LatLng l2 = LatLng(_latitude, _longitude);
+
+    num distance = geodesy.distanceBetweenTwoGeoPoints(l1, l2);
+    print("Distance: " + (distance / 1000).toString());
+    print(_latitude);
+    print(_longitude);
   }
 }
