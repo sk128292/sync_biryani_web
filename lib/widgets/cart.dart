@@ -1,4 +1,3 @@
-import 'dart:html';
 import 'dart:js';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -13,6 +12,7 @@ import 'package:sync_biryani_web/location/utilities/loc.dart';
 import 'package:sync_biryani_web/provider/cart_provider.dart';
 import 'package:sync_biryani_web/provider/coupon_provider.dart';
 import 'package:sync_biryani_web/screens/login.dart';
+import 'package:sync_biryani_web/screens/payment/razorpay/razorpay_payment_screen.dart';
 import 'package:sync_biryani_web/services/cart_service.dart';
 import 'package:sync_biryani_web/services/comman_services.dart';
 import 'package:sync_biryani_web/services/order_services.dart';
@@ -30,10 +30,10 @@ class Cart extends StatefulWidget {
 }
 
 class _CartState extends State<Cart> {
-  final _formKey = GlobalKey<FormState>();
   UserServices _userService = UserServices();
   OrderServices _orderServices = OrderServices();
   CartService _cartService = CartService();
+  CommanServices _commanServices = CommanServices();
   User user = FirebaseAuth.instance.currentUser;
 
   var _addressTextController = TextEditingController();
@@ -63,7 +63,7 @@ class _CartState extends State<Cart> {
     var _payable = _cartProvider.subTotal + deliveryFee - discount;
 
     return Card(
-      color: Colors.grey[350],
+      color: Colors.grey[100],
       child: Container(
         width: MediaQuery.of(context).size.width / 3.5,
 
@@ -408,13 +408,61 @@ class _CartState extends State<Cart> {
                       color: Colors.green[500],
                       height: 40,
                       onPressed: () {
+                        EasyLoading.show(status: 'Please wait....');
                         _userService.getUserById(user.uid).then((value) {
                           if (value.name == null) {
+                            EasyLoading.dismiss();
                             changeScreen(context, LoginPage());
                           } else {
-                            EasyLoading.show(status: 'Please Wait...');
-                            // TODO: Payment Gateway intigration
-                            _saveOrder(_cartProvider, _payable, _coupon);
+                            EasyLoading.dismiss();
+
+                            if (_city.isNotEmpty) {
+                              if (_contactNumberTextController.text.length !=
+                                  0) {
+                                if (_addressTextController.text.length != 0) {
+                                  if (_cartProvider.cod == false) {
+                                    print('pay Online');
+                                    // pay Online
+                                    Navigator.pushNamed(
+                                        context, RazorpayPaymentScreen.id);
+                                  } else {
+                                    // cash On delivery
+                                    _saveOrder(
+                                        _cartProvider, _payable, _coupon);
+                                    print('Cash on Delivery');
+                                  }
+                                } else {
+                                  print('Please Enter Delivery Address');
+                                  _commanServices.showMyDialog(
+                                      context: context,
+                                      message:
+                                          'Please provide Delivery Address',
+                                      title: 'Delivery Address');
+                                }
+                              } else {
+                                print('Please provide Contact number');
+                                _commanServices.showMyDialog(
+                                    context: context,
+                                    message: 'Please provide Contact number',
+                                    title: 'Contact Number');
+                              }
+                            } else {
+                              _commanServices.showMyDialog(
+                                  context: context,
+                                  message:
+                                      'Please tap on get location and check delivery availability',
+                                  title: 'Location Unknown');
+                            }
+                            // EasyLoading.show(status: 'Please Wait...');
+                            // First check Payment type
+                            // if (_cartProvider.cod == false) {
+                            //   // pay Online
+                            //   Navigator.pushNamed(
+                            //       context, RazorpayPaymentScreen.id);
+                            // } else {
+                            //   // cash On delivery
+                            //   _saveOrder(_cartProvider, _payable, _coupon);
+                            // }
                           }
                         });
                       },

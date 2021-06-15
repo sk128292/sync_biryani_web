@@ -129,7 +129,8 @@ class _OrderWidgetState extends State<OrderWidget> {
                             ),
                           ),
                           //  Delivery boy Contact
-                          if (document.data()['deliveryBoy']['name'] > 2)
+
+                          if (document.data()['deliveryBoy']['image'] != null)
                             Padding(
                               padding:
                                   const EdgeInsets.only(left: 10, right: 10),
@@ -138,7 +139,9 @@ class _OrderWidgetState extends State<OrderWidget> {
                                 leading: CircleAvatar(
                                   backgroundColor: Colors.white,
                                   child: Image.network(
-                                    document.data()['deliveryBoy']['image'],
+                                    document
+                                        .data()['deliveryBoy']['image']
+                                        .toString(),
                                   ),
                                 ),
                                 title: Text(

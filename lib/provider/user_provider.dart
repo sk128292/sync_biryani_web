@@ -2,7 +2,6 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:sync_biryani_web/models/order_model.dart';
 import 'package:sync_biryani_web/models/product_model.dart';
 import 'package:sync_biryani_web/models/user_model.dart';
-import 'package:sync_biryani_web/services/order_services.dart';
 import 'package:sync_biryani_web/services/user_services.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';

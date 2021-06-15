@@ -4,7 +4,6 @@ import 'package:sync_biryani_web/helpers/screen_navigation.dart';
 import 'package:sync_biryani_web/provider/user_provider.dart';
 import 'package:sync_biryani_web/screens/login.dart';
 import 'package:sync_biryani_web/widgets/order/order_widget.dart';
-import 'package:sync_biryani_web/widgets/profile/profile_side_layout.dart';
 import 'package:sync_biryani_web/widgets/profile/profile_update_widget.dart';
 import 'package:sync_biryani_web/widgets/responsive.dart';
 import 'package:sync_biryani_web/widgets/synch_drawer.dart';

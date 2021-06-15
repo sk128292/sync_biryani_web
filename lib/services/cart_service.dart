@@ -68,5 +68,6 @@ class CartService {
         ds.reference.delete();
       }
     });
+    return result;
   }
 }
