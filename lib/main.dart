@@ -11,6 +11,7 @@ import 'package:sync_biryani_web/provider/product_provider.dart';
 import 'package:sync_biryani_web/provider/user_provider.dart';
 import 'package:sync_biryani_web/screens/home_page.dart';
 import 'package:sync_biryani_web/screens/login.dart';
+import 'package:sync_biryani_web/screens/payment/razorpay/razor_pay_web.dart';
 import 'package:sync_biryani_web/screens/payment/razorpay/razorpay_payment_screen.dart';
 import 'package:sync_biryani_web/screens/product_page.dart';
 import 'package:sync_biryani_web/screens/profile_screen.dart';
@@ -49,7 +50,7 @@ Future<void> main() async {
           ProfileScreen.id: (context) => ProfileScreen(),
           ProfileUpdateWidget.id: (context) => ProfileUpdateWidget(),
           ScreenController.id: (context) => ScreenController(),
-          RazorpayPaymentScreen.id: (context) => RazorpayPaymentScreen(),
+          // RazorpayPaymentScreen.id: (context) => RazorpayPaymentScreen(),
         },
         builder: EasyLoading.init(),
       ),

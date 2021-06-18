@@ -5,7 +5,7 @@ class WidgetFooter extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       height: MediaQuery.of(context).size.width / 6,
-      color: Colors.blue,
+      color: Colors.blueGrey,
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: [

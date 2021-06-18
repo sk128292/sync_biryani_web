@@ -73,25 +73,7 @@ class _MyHomePageState extends State<MyHomePage> {
             ),
             Container(
               height: screenSize.width / 6,
-              child:
-                  // ListView.builder(
-                  //   scrollDirection: Axis.horizontal,
-                  //   itemCount: categoryProvider.categories.length,
-                  //   itemBuilder: (_, index) {
-                  //     return Padding(
-                  //       padding: const EdgeInsets.all(10.0),
-                  //       child: Container(
-                  //         width: MediaQuery.of(context).size.width / 4,
-                  //         clipBehavior: Clip.antiAlias,
-                  //         decoration: BoxDecoration(
-                  //             borderRadius: BorderRadius.all(Radius.circular(8)),
-                  //             color: Colors.red),
-                  //         child: Text(categoryProvider.categories[index].name),
-                  //       ),
-                  //     );
-                  //   },
-                  // ),
-                  ListView.builder(
+              child: ListView.builder(
                 scrollDirection: Axis.horizontal,
                 itemCount: categoryProvider.categories.length,
                 itemBuilder: (_, index) {

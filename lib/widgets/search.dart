@@ -132,9 +132,11 @@ class _SearchBoxState extends State<SearchBox> {
                           );
                         } else {
                           Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => ProductScreen()));
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => ProductScreen(),
+                            ),
+                          );
                         }
                       },
                       child: Container(
@@ -282,15 +284,15 @@ class _SearchBoxState extends State<SearchBox> {
     }));
   }
 
-  void calculateDistance() {
-    Geodesy geodesy = Geodesy();
+  // void calculateDistance() {
+  //   Geodesy geodesy = Geodesy();
 
-    LatLng l1 = LatLng(28.599365, 77.074882);
-    LatLng l2 = LatLng(_latitude, _longitude);
+  //   LatLng l1 = LatLng(28.599365, 77.074882);
+  //   LatLng l2 = LatLng(_latitude, _longitude);
 
-    num distance = geodesy.distanceBetweenTwoGeoPoints(l1, l2);
-    print("Distance: " + (distance / 1000).toString());
-    print(_latitude);
-    print(_longitude);
-  }
+  //   num distance = geodesy.distanceBetweenTwoGeoPoints(l1, l2);
+  //   print("Distance: " + (distance / 1000).toString());
+  //   print(_latitude);
+  //   print(_longitude);
+  // }
 }

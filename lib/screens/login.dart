@@ -31,14 +31,15 @@ class _LoginPageState extends State<LoginPage> {
                   width: MediaQuery.of(context).size.width / 1.5,
                   height: 500,
                   decoration: BoxDecoration(
-                    gradient: LinearGradient(
-                      begin: Alignment.topCenter,
-                      colors: [
-                        Colors.green,
-                        Colors.orange,
-                        Colors.black,
-                      ],
-                    ),
+                    color: Colors.blueGrey[50],
+                    // gradient: LinearGradient(
+                    //   begin: Alignment.topCenter,
+                    //   colors: [
+                    //     Colors.green,
+                    //     Colors.orange,
+                    //     Colors.black,
+                    //   ],
+                    // ),
                     borderRadius: BorderRadius.all(
                       Radius.circular(10),
                     ),
@@ -73,7 +74,7 @@ class _LoginPageState extends State<LoginPage> {
                                       CustomText(
                                         text: "Synchrotron Biryani",
                                         size: 20,
-                                        colors: white,
+                                        colors: black,
                                         weight: FontWeight.bold,
                                       ),
                                     ],
@@ -82,7 +83,8 @@ class _LoginPageState extends State<LoginPage> {
                                     padding: const EdgeInsets.all(12.0),
                                     child: Container(
                                       decoration: BoxDecoration(
-                                        border: Border.all(color: grey),
+                                        border: Border.all(
+                                            color: Colors.lightGreen[900]),
                                         borderRadius: BorderRadius.circular(15),
                                       ),
                                       child: Padding(
@@ -103,7 +105,8 @@ class _LoginPageState extends State<LoginPage> {
                                     padding: const EdgeInsets.all(12.0),
                                     child: Container(
                                       decoration: BoxDecoration(
-                                        border: Border.all(color: grey),
+                                        border: Border.all(
+                                            color: Colors.lightGreen[900]),
                                         borderRadius: BorderRadius.circular(15),
                                       ),
                                       child: Padding(
@@ -138,8 +141,9 @@ class _LoginPageState extends State<LoginPage> {
                                       },
                                       child: Container(
                                         decoration: BoxDecoration(
-                                          color: red,
-                                          border: Border.all(color: grey),
+                                          color: Colors.teal[900],
+                                          border: Border.all(
+                                              color: Colors.lime[900]),
                                           borderRadius:
                                               BorderRadius.circular(15),
                                         ),
@@ -170,7 +174,10 @@ class _LoginPageState extends State<LoginPage> {
                                           MainAxisAlignment.center,
                                       children: [
                                         CustomText(
-                                            text: "Register Here", size: 20),
+                                          text: "Register Here",
+                                          size: 20,
+                                          colors: red,
+                                        ),
                                       ],
                                     ),
                                   )

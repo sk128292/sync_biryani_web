@@ -1,18 +1,20 @@
-import 'dart:js';
+import 'dart:html';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:geodesy/geodesy.dart';
+import 'package:js/js.dart';
 import 'package:provider/provider.dart';
+import 'package:razorpay_flutter/razorpay_flutter.dart';
 import 'package:sync_biryani_web/helpers/screen_navigation.dart';
 import 'package:sync_biryani_web/location/utilities/api.dart';
 import 'package:sync_biryani_web/location/utilities/loc.dart';
 import 'package:sync_biryani_web/provider/cart_provider.dart';
 import 'package:sync_biryani_web/provider/coupon_provider.dart';
 import 'package:sync_biryani_web/screens/login.dart';
-import 'package:sync_biryani_web/screens/payment/razorpay/razorpay_payment_screen.dart';
+import 'package:sync_biryani_web/screens/payment/razorpay/razor_pay_web.dart';
 import 'package:sync_biryani_web/services/cart_service.dart';
 import 'package:sync_biryani_web/services/comman_services.dart';
 import 'package:sync_biryani_web/services/order_services.dart';
@@ -20,6 +22,7 @@ import 'package:sync_biryani_web/services/user_services.dart';
 import 'package:sync_biryani_web/widgets/cart/cart_list.dart';
 import 'package:sync_biryani_web/widgets/cart/cod_toggle.dart';
 import 'package:sync_biryani_web/widgets/cart/coupon_widget.dart';
+import 'package:toast/toast.dart';
 
 class Cart extends StatefulWidget {
   final DocumentSnapshot document;
@@ -49,6 +52,61 @@ class _CartState extends State<Cart> {
   String _city = '';
   double _latitude = 0.0;
   double _longitude = 0.0;
+  Razorpay razorpay;
+  TextEditingController textEditingController = new TextEditingController();
+
+  @override
+  void initState() {
+    super.initState();
+    razorpay = new Razorpay();
+    razorpay.on(Razorpay.EVENT_PAYMENT_SUCCESS, handlePaymentSuccess);
+    razorpay.on(Razorpay.EVENT_PAYMENT_ERROR, handlePaymentError);
+    razorpay.on(Razorpay.EVENT_EXTERNAL_WALLET, handleExternalWallet);
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    razorpay.clear();
+  }
+
+  void openCheckout() {
+    var options = {
+      "key": "rzp_test_62wBmqWXtrZhOd",
+      "amount": textEditingController.text,
+      "name": "Sample App",
+      "description": "Payment Gateway for demo app",
+      "prefill": {
+        "contact": "8080036747",
+        "email": "pranalipardeshi30@gmail.com",
+        "external": {
+          "wallet": ["paytm"]
+        }
+      }
+    };
+    try {
+      print("razopay api called");
+      razorpay.open(options);
+    } catch (e) {
+      print(e.toString());
+    }
+  }
+
+  void handlePaymentSuccess() {
+    print('Payment SUccessful');
+    EasyLoading.showSuccess('Payment Successfull');
+    Navigator.pop(context);
+  }
+
+  void handlePaymentError() {
+    print('Payment Error');
+    EasyLoading.showError('Payment Failed');
+  }
+
+  void handleExternalWallet() {
+    print('External Wallet');
+    Toast.show("External Wallet", context);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -423,12 +481,15 @@ class _CartState extends State<Cart> {
                                   if (_cartProvider.cod == false) {
                                     print('pay Online');
                                     // pay Online
-                                    Navigator.pushNamed(
-                                        context, RazorpayPaymentScreen.id);
+                                    Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                            builder: (context) =>
+                                                RazorPayWeb()));
                                   } else {
                                     // cash On delivery
-                                    _saveOrder(
-                                        _cartProvider, _payable, _coupon);
+                                    // _saveOrder(
+                                    //     _cartProvider, _payable, _coupon);
                                     print('Cash on Delivery');
                                   }
                                 } else {

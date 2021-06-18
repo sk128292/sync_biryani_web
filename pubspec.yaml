@@ -49,9 +49,11 @@ dependencies:
   dotted_border: ^2.0.0
   chips_choice: ^2.0.1
   stripe_checkout: ^0.0.1-dev1
-  razorpay_flutter: ^1.1.0
+  razorpay_flutter: ^1.1.1
   flutter_credit_card: ^0.1.4
-  fluttertoast: ^7.1.8
+  webviewx: ^0.1.0
+  toast: ^0.1.5
+  js: ^0.6.2
 
 
 dev_dependencies:
