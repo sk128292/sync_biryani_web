@@ -3,6 +3,7 @@ import 'package:sync_biryani_web/models/category_model.dart';
 import 'package:sync_biryani_web/widgets/custom_text.dart';
 import 'package:sync_biryani_web/widgets/loading.dart';
 import 'package:flutter/material.dart';
+import 'package:sync_biryani_web/widgets/responsive.dart';
 import 'package:transparent_image/transparent_image.dart';
 
 class Categories extends StatelessWidget {
@@ -25,10 +26,11 @@ class Categories extends StatelessWidget {
                 child: Stack(
                   children: <Widget>[
                     Positioned.fill(
-                        child: Align(
-                      alignment: Alignment.center,
-                      child: Loading(),
-                    )),
+                      child: Align(
+                        alignment: Alignment.center,
+                        child: Loading(),
+                      ),
+                    ),
                     Container(
                       color: Colors.transparent,
                       width: MediaQuery.of(context).size.width / 4,
@@ -48,26 +50,47 @@ class Categories extends StatelessWidget {
             ),
           ),
         ),
-        Positioned(
-          width: MediaQuery.of(context).size.width / 4,
-          bottom: 1.0,
-          height: MediaQuery.of(context).size.width / 24,
-          // left: 0.0,
-          // right: 1.0,
-          child: Card(
-            color: Colors.black.withOpacity(0.37),
-            child: Padding(
-              padding: const EdgeInsets.only(
-                top: 10.0,
+        Responsive.isMobile(context)
+            ? Positioned(
+                width: MediaQuery.of(context).size.width / 4,
+                bottom: 1.0,
+                height: MediaQuery.of(context).size.width / 15,
+                // left: 0.0,
+                // right: 1.0,
+                child: Card(
+                  color: Colors.black.withOpacity(0.37),
+                  child: Padding(
+                    padding: const EdgeInsets.only(
+                      top: 10.0,
+                    ),
+                    child: CustomText(
+                      text: category.name,
+                      colors: white,
+                      size: MediaQuery.of(context).size.width * 0.023,
+                    ),
+                  ),
+                ),
+              )
+            : Positioned(
+                width: MediaQuery.of(context).size.width / 4,
+                bottom: 1.0,
+                height: MediaQuery.of(context).size.width / 20,
+                // left: 0.0,
+                // right: 1.0,
+                child: Card(
+                  color: Colors.black.withOpacity(0.37),
+                  child: Padding(
+                    padding: const EdgeInsets.only(
+                      top: 10.0,
+                    ),
+                    child: CustomText(
+                      text: category.name,
+                      colors: white,
+                      size: MediaQuery.of(context).size.width * 0.017,
+                    ),
+                  ),
+                ),
               ),
-              child: CustomText(
-                text: category.name,
-                colors: white,
-                size: 17,
-              ),
-            ),
-          ),
-        ),
       ],
     );
   }

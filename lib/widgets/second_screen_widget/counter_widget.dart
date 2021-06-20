@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:sync_biryani_web/services/cart_service.dart';
+import 'package:sync_biryani_web/widgets/responsive.dart';
 import 'package:sync_biryani_web/widgets/second_screen_widget/add_to_cart_widget.dart';
 
 class CounterWidget extends StatefulWidget {
@@ -27,7 +28,9 @@ class _CounterWidgetState extends State<CounterWidget> {
 
     return _exists
         ? Container(
-            height: 30,
+            height: Responsive.isMobile(context)
+                ? MediaQuery.of(context).size.width * 0.045
+                : 30,
             decoration: BoxDecoration(
               border: Border.all(color: Colors.pink),
               borderRadius: BorderRadius.circular(5),
@@ -65,13 +68,16 @@ class _CounterWidgetState extends State<CounterWidget> {
                   },
                   child: Container(
                     child: Padding(
-                      padding: EdgeInsets.only(left: 3, right: 3),
+                      padding: EdgeInsets.only(left: 2, right: 2),
                       child: _unitQty == 1
                           ? Icon(
                               Icons.delete_outline,
                               color: Colors.red,
                             )
-                          : Icon(Icons.remove, color: Colors.red),
+                          : Icon(
+                              Icons.remove,
+                              color: Colors.red,
+                            ),
                     ),
                   ),
                 ),
@@ -111,7 +117,7 @@ class _CounterWidgetState extends State<CounterWidget> {
                   },
                   child: Container(
                     child: Padding(
-                      padding: EdgeInsets.only(left: 3, right: 3),
+                      padding: EdgeInsets.only(left: 2, right: 2),
                       child: Icon(Icons.add, color: Colors.red),
                     ),
                   ),

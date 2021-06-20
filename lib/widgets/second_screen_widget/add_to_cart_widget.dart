@@ -5,6 +5,7 @@ import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:provider/provider.dart';
 import 'package:sync_biryani_web/provider/user_provider.dart';
 import 'package:sync_biryani_web/services/cart_service.dart';
+import 'package:sync_biryani_web/widgets/responsive.dart';
 import 'package:sync_biryani_web/widgets/second_screen_widget/counter_widget.dart';
 
 class AddToCartWidget extends StatefulWidget {
@@ -73,7 +74,7 @@ class _AddToCartWidgetState extends State<AddToCartWidget> {
     });
     return _loading
         ? Container(
-            height: 20,
+            height: MediaQuery.of(context).size.width * 0.02,
             child: Center(
               child: CircularProgressIndicator(
                 valueColor: AlwaysStoppedAnimation<Color>(
@@ -101,7 +102,9 @@ class _AddToCartWidgetState extends State<AddToCartWidget> {
                 child: Text(
                   "Add To Cart",
                   style: TextStyle(
-                    fontSize: MediaQuery.of(context).size.width / 85,
+                    fontSize: Responsive.isDesktop(context)
+                        ? MediaQuery.of(context).size.width / 85
+                        : MediaQuery.of(context).size.width * 0.025,
                     color: Colors.white,
                   ),
                 ),

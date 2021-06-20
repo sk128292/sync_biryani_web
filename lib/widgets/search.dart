@@ -7,6 +7,7 @@ import 'package:sync_biryani_web/location/utilities/api.dart';
 import 'package:sync_biryani_web/location/utilities/loc.dart';
 import 'package:sync_biryani_web/screens/second_screen/second_page.dart';
 import 'package:sync_biryani_web/services/comman_services.dart';
+import 'package:sync_biryani_web/widgets/responsive.dart';
 
 class SearchBox extends StatefulWidget {
   @override
@@ -38,45 +39,41 @@ class _SearchBoxState extends State<SearchBox> {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Container(
-                    height: 50,
-                    width: MediaQuery.of(context).size.width / 3,
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.only(
-                        topLeft: Radius.circular(10),
-                        bottomLeft: Radius.circular(10),
-                      ),
-                      color: Colors.white,
-                    ),
-                    child: ListTile(
-                      leading: Icon(
-                        Icons.search,
-                        color: Colors.red,
-                      ),
-                      title: TextField(
-                        enabled: false,
-                        textInputAction: TextInputAction.done,
-                        onSubmitted: (String city) {
-                          setState(() {
-                            _city = city;
-                          });
-                        },
-                        decoration: InputDecoration(
-                          hintText:
-                              _city.isEmpty ? "Get your Location" : '$_city',
-                          border: InputBorder.none,
-                        ),
-                      ),
-                      trailing: Padding(
-                        padding: EdgeInsets.all(10),
-                        child: Icon(Icons.filter_list, color: Colors.red),
-                      ),
+              Container(
+                height: 50,
+                width: Responsive.isMobile(context)
+                    ? MediaQuery.of(context).size.width / 1.5
+                    : MediaQuery.of(context).size.width / 3,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.only(
+                    topLeft: Radius.circular(10),
+                    bottomLeft: Radius.circular(10),
+                  ),
+                  color: Colors.white,
+                ),
+                child: ListTile(
+                  leading: Icon(
+                    Icons.search,
+                    color: Colors.red,
+                  ),
+                  title: TextField(
+                    enabled: false,
+                    textInputAction: TextInputAction.done,
+                    onSubmitted: (String city) {
+                      setState(() {
+                        _city = city;
+                      });
+                    },
+                    decoration: InputDecoration(
+                      hintText: _city.isEmpty ? "Get your Location" : '$_city',
+                      border: InputBorder.none,
                     ),
                   ),
-                ],
+                  // trailing: Padding(
+                  //   padding: EdgeInsets.all(10),
+                  //   child: Icon(Icons.filter_list, color: Colors.red),
+                  // ),
+                ),
               ),
               _city.isEmpty
                   ? GestureDetector(
@@ -107,7 +104,7 @@ class _SearchBoxState extends State<SearchBox> {
                               child: Text(
                                 " Get Location",
                                 style: TextStyle(
-                                    color: Colors.white, fontSize: 22),
+                                    color: Colors.white, fontSize: 18),
                               ),
                             )
                           ],
@@ -157,7 +154,7 @@ class _SearchBoxState extends State<SearchBox> {
                               child: Text(
                                 " Order Now",
                                 style: TextStyle(
-                                    color: Colors.white, fontSize: 22),
+                                    color: Colors.white, fontSize: 18),
                               ),
                             )
                           ],

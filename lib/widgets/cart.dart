@@ -22,6 +22,7 @@ import 'package:sync_biryani_web/services/user_services.dart';
 import 'package:sync_biryani_web/widgets/cart/cart_list.dart';
 import 'package:sync_biryani_web/widgets/cart/cod_toggle.dart';
 import 'package:sync_biryani_web/widgets/cart/coupon_widget.dart';
+import 'package:sync_biryani_web/widgets/responsive.dart';
 import 'package:toast/toast.dart';
 
 class Cart extends StatefulWidget {
@@ -123,9 +124,9 @@ class _CartState extends State<Cart> {
     return Card(
       color: Colors.grey[100],
       child: Container(
-        width: MediaQuery.of(context).size.width / 3.5,
-
-        // color: Colors.grey[200],
+        width: Responsive.isDesktop(context)
+            ? MediaQuery.of(context).size.width / 3.2
+            : MediaQuery.of(context).size.width / 1.2,
         child: Column(
           children: [
             Padding(
@@ -148,7 +149,9 @@ class _CartState extends State<Cart> {
               padding: const EdgeInsets.all(8.0),
               child: Container(
                 height: 2,
-                width: MediaQuery.of(context).size.width / 3.5,
+                width: Responsive.isDesktop(context)
+                    ? MediaQuery.of(context).size.width / 3.2
+                    : MediaQuery.of(context).size.width / 1.2,
                 color: Colors.black,
               ),
             ),
@@ -162,7 +165,7 @@ class _CartState extends State<Cart> {
                       // Bill Detailed Card
 
                       SizedBox(
-                        width: MediaQuery.of(context).size.width / 3.5,
+                        // width: MediaQuery.of(context).size.width / 3.5,
                         child: Card(
                           child: Padding(
                             padding: const EdgeInsets.all(8.0),

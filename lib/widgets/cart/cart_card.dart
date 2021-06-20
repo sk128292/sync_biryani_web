@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:sync_biryani_web/widgets/cart/counter_cart.dart';
+import 'package:sync_biryani_web/widgets/responsive.dart';
 
 class CartCard extends StatelessWidget {
   final DocumentSnapshot document;
@@ -22,7 +23,7 @@ class CartCard extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: <Widget>[
                         Container(
-                          width: MediaQuery.of(context).size.width / 6,
+                          // width: MediaQuery.of(context).size.width / 6,
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
@@ -31,8 +32,10 @@ class CartCard extends StatelessWidget {
                                   text: document.data()['name'],
                                   // "Hyderabadi Dum Gosht [Mutton Biryani, Boneless - Serves 1]",
                                   style: TextStyle(
-                                    fontSize:
-                                        MediaQuery.of(context).size.width / 85,
+                                    fontSize: Responsive.isDesktop(context)
+                                        ? MediaQuery.of(context).size.width / 84
+                                        : MediaQuery.of(context).size.width *
+                                            0.022,
                                   ),
                                 ),
                               ),
@@ -41,7 +44,7 @@ class CartCard extends StatelessWidget {
                               ),
                               Row(
                                 mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
+                                    MainAxisAlignment.spaceEvenly,
                                 children: <Widget>[
                                   Text(
                                     'Rs. ' +

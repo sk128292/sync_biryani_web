@@ -94,7 +94,9 @@ class _ProductScreenState extends State<ProductScreen> {
             child: Divider(thickness: 1, color: Colors.black),
           ),
           Container(
-            padding: EdgeInsets.only(left: 50, right: 50),
+            padding: Responsive.isDesktop(context)
+                ? EdgeInsets.only(left: 50, right: 50)
+                : EdgeInsets.only(left: 10, right: 10),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
@@ -137,18 +139,21 @@ class _ProductScreenState extends State<ProductScreen> {
             padding: const EdgeInsets.only(left: 20, right: 20),
             child: Divider(thickness: 1, color: Colors.black),
           ),
-          Padding(
-              padding: const EdgeInsets.all(25.0),
-              child: Responsive.isDesktop(context)
-                  ? Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        ProductDisplay(),
-                        Cart(),
-                      ],
-                    )
-                  : ProductDisplay()),
+          Responsive.isDesktop(context)
+              ? Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    ProductDisplay(),
+                    Cart(),
+                  ],
+                )
+              : Column(
+                  children: [
+                    ProductDisplay(),
+                    Cart(),
+                  ],
+                ),
           WidgetFooter(),
         ],
       ),
