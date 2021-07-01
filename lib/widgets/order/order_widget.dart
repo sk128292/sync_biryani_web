@@ -85,6 +85,7 @@ class _OrderWidgetState extends State<OrderWidget> {
                 }
 
                 return new ListView(
+                  shrinkWrap: true,
                   children: snapshot.data.docs.map((DocumentSnapshot document) {
                     return Card(
                       color: Colors.white,

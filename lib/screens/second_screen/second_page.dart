@@ -45,7 +45,6 @@ class _ProductScreenState extends State<ProductScreen> {
             ),
       drawer: SynchDrawer(),
       body: ListView(
-        // physics: NeverScrollableScrollPhysics(),
         shrinkWrap: true,
         children: [
           Padding(
@@ -53,7 +52,7 @@ class _ProductScreenState extends State<ProductScreen> {
             child: Container(
               alignment: Alignment.bottomCenter,
               color: Colors.blueGrey,
-              height: MediaQuery.of(context).size.width / 3,
+              height: MediaQuery.of(context).size.width / 3.5,
               width: MediaQuery.of(context).size.width,
               child: Padding(
                 padding: const EdgeInsets.only(bottom: 10),
