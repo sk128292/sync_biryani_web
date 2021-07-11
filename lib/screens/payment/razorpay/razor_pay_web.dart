@@ -1,10 +1,13 @@
+// ignore: avoid_web_libraries_in_flutter
 import 'dart:html';
+// ignore: unused_import
 import 'dart:ui' as ui;
 //conditional import
 import 'package:sync_biryani_web/screens/payment/razorpay/ui_fake.dart'
     if (dart.library.html) 'dart:ui' as ui;
 import 'package:flutter/material.dart';
 
+// ignore: non_constant_identifier_names
 String razorpay_key = "rzp_test_Tu5Bvpcye1aPrh";
 String amount = "1000";
 

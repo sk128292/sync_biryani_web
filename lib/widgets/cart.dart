@@ -1,5 +1,3 @@
-import 'dart:html';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -545,6 +543,7 @@ class _CartState extends State<Cart> {
     );
   }
 
+  // ignore: unused_element
   _saveOrder(CartProvider cartProvider, payable, CouponProvider coupon) {
     _orderServices.saveOrder({
       'orderId': DateTime.now().microsecondsSinceEpoch.toString(),
