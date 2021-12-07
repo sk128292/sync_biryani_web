@@ -53,7 +53,7 @@ dependencies:
   flutter_credit_card: ^0.1.4
   webviewx: ^0.1.0
   toast: ^0.1.5
-  js: ^0.6.2
+  js: ^0.6.3
 
 
 dev_dependencies:
